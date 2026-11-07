@@ -3,30 +3,26 @@
 > Обновляется в конце **каждой** сессии работы (любым ассистентом или человеком).
 > Архитектура — в `docs/CONCEPT.md`. Правила — в `AGENTS.md`.
 
-**Последнее обновление:** 2026-11-08 · **Кто:** Claude (сессия 1)
-**Текущая фаза:** 0 → завершена. Следующая: **Фаза 1 — Каталог станций**.
+**Последнее обновление:** 2026-11-08 · **Кто:** Claude (сессия 2)
+**Текущая фаза:** 1 — Каталог станций (в работе).
 
 ---
 
 ## ▶ Следующий шаг (начинать отсюда)
 
-**1. Пользователю: пересобрать каталог** (в `curated.yaml` добавлены 7 станций и потоки KPWR/KLOS/KNX/KLAX; нужна проверка):
+**Запустить проверку потоков на компьютере пользователя (Windows) и прислать результат.**
+
+В облачной среде ассистента нет выхода к сайтам радио (ошибка DNS `EAI_AGAIN`), поэтому `npm run check` работает только у пользователя или в GitHub Actions.
+
+Команды для пользователя (PowerShell, нужен Node.js 20+):
 ```
 cd E:\santa-monica-radio-pwa\catalog
-npm run build
+npm i
+npm run check
 ```
-Ассистент читает `catalog\dist\report.md` и `catalog\dist\stations.json` прямо из папки.
+Результат (таблицу) вставить в чат ассистенту.
 
-**2. Ассистенту — оставшиеся задачи фазы 1:**
-- Станции без потоков: **K-EARTH 101 (KRTH), 94.7 The Wave (KTWV), Go Country 105 (KKGO)** — искать (Audacy: mount с `audacy-...-imc` не подошли; пробовать страницу станции / `streamtheworld` API-xml / Radio Browser по тегам). Пока не попадают в каталог.
-- 1.9 JSON Schema для `stations.json` + проверка в `build`.
-- 1.10 GitHub-репозиторий + Actions (ежедневная сборка) + GitHub Pages — нужен GitHub-аккаунт пользователя (вопрос Q4).
-- 1.11 `design/tokens.json` (CONCEPT §8.2).
-- Позже: `.pls/.m3u` resolve и автослияние с Radio Browser (сейчас список ведётся вручную в `curated.yaml`, поиск — `npm run discover` / `npm run probe`).
-
-Потом — Фаза 2 (Android). Перед ней решить Q2 (`applicationId`) и Q6 (русский интерфейс).
-
-**Команды каталога:** `npm run check` (проверка потоков), `npm run discover` / `npm run probe` (поиск потоков, отчёты `discover-report.md` / `probe-report.md`), `npm run build` (→ `dist/stations.json`). Запускать на компьютере пользователя: в облаке ассистента нет доступа к сайтам радио.
+Дальше (задачи 1.6–1.8): `fetch-radiobrowser.ts` (станции LA из Radio Browser), затем `merge.ts` / `resolve.ts` / `classify.ts` / `build.ts` → `dist/stations.json`. По результатам проверки поправить `curated.yaml`: мёртвые потоки заменить найденными в Radio Browser, у кандидатов (`verified: false`) заполнить потоки.
 
 ---
 
@@ -35,7 +31,7 @@ npm run build
 | Фаза | Название | Статус |
 |------|----------|--------|
 | 0 | Анализ прототипа и концепция | ✅ готово |
-| 1 | Каталог станций (`catalog/`) | ⏳ следующая |
+| 1 | Каталог станций (`catalog/`) | 🔧 в работе |
 | 2 | Android: каркас и воспроизведение | ⬜ |
 | 3 | Android: ретро-UI и визуализатор | ⬜ |
 | 4 | Android: эквалайзер, качество, буфер | ⬜ |
@@ -55,14 +51,14 @@ npm run build
 - [x] Написаны `AGENTS.md`, `docs/CONCEPT.md`, `docs/PROGRESS.md`.
 
 ### Фаза 1 — Каталог станций
-- [ ] 1.1 git + `.gitignore`
-- [ ] 1.2 Прототип → `legacy/`
-- [ ] 1.3 Каркас `catalog/` (TS, `tsx`, `yaml`, `undici`)
-- [ ] 1.4 `curated.yaml` — 6 станций прототипа + кандидаты из CONCEPT §4.2 (с пометкой «не проверено»)
-- [ ] 1.5 `check.ts` — проверка потоков (ICY-заголовки, content-type, битрейт, задержка)
-- [~] 1.6 Поиск в Radio Browser — сделан как `discover.ts` + `probe.ts` (поиск вручную, с отчётом); автоматический `fetch-radiobrowser.ts` отложен
-- [~] 1.7 `classify` встроен в `build.ts`; `merge.ts` и `resolve.ts` (.pls/.m3u) отложены — пока список ведётся вручную
-- [x] 1.8 `build.ts` → `dist/stations.json` по схеме CONCEPT §4.3 + `dist/report.md` (первый прогон: 13 станций, все потоки живы)
+- [x] 1.1 git + `.gitignore`
+- [x] 1.2 Прототип → `legacy/`
+- [x] 1.3 Каркас `catalog/` (TS, `tsx`, `yaml`, `undici`)
+- [x] 1.4 `curated.yaml` — 6 станций прототипа + кандидаты из CONCEPT §4.2 (с пометкой «не проверено»)
+- [x] 1.5 `check.ts` — проверка потоков (ICY-заголовки, content-type, битрейт, задержка). Написан и проходит typecheck; **реальный прогон ещё не выполнен** (нет сети в облаке) — запустить у пользователя
+- [ ] 1.6 `fetch-radiobrowser.ts` — станции LA из Radio Browser
+- [ ] 1.7 `merge.ts`, `resolve.ts` (.pls/.m3u, редиректы), `classify.ts`
+- [ ] 1.8 `build.ts` → `dist/stations.json` по схеме CONCEPT §4.3 + `dist/report.md`
 - [ ] 1.9 JSON Schema + валидация в тестах
 - [ ] 1.10 GitHub репозиторий + Actions (ежедневно) + GitHub Pages
 - [ ] 1.11 `design/tokens.json` (CONCEPT §8.2)
@@ -160,22 +156,13 @@ npm run build
 3. **HTTP-поток (KJLH) на HTTPS-странице** блокируется браузером. → relay в вебе, `network_security_config` на Android.
 4. Адреса StreamTheWorld из прототипа не проверялись с августа 2026. → Автопроверка каталога.
 5. В прототипе не было git. → Git с фазы 1.
+6. Облачная среда ассистента не видит сайты радио (DNS). → Проверки потоков запускать у пользователя или в GitHub Actions.
 
 ---
-
-## Найденные факты о потоках (2026-11-08)
-
-- **iHeart-станции играют без входа:** `https://stream.revma.ihrhls.com/zc<N>`, где N — число из конца ссылки iheart.com (KIIS 185, REAL 92.3 181, KOST 193, MYfm 173, ALT 98.7 201, KFI 177). Есть и HLS: `.../zc<N>/hls.m3u8`. Подтверждено проверкой.
-- **Audacy (KROQ, KNX):** `https://live.amperwave.net/direct/audacy-<позывной><fm|am>aac-imc`. KRTH и KTWV по этому шаблону не нашлись.
-- **StreamTheWorld:** у POWER 106 новый mount `KPWR_SC` (старые `KPWRFM*` дают 404). KLOS: `KLOSFM.mp3`, `KLOSFMAAC.aac`. KDAY — `KDAYFM.mp3` (48 кбит/с, довольно тихий поток).
-- **KCRW** находится в Санта-Монике (отсюда имя проекта): `streams.kcrw.com/kcrw_mp3`, `kcrw_aac`, `e24_mp3`.
-- Большинство потоков отдают ICY-метаданные («что играет»). HTTPS есть почти везде; HTTP-only варианты оставлены как запасные.
-- KXLU: `kxlu-hi` 320 кбит/с (тяжёлый), `kxlu-lo` AAC 48 кбит/с.
 
 ## Журнал сессий
 
 | № | Дата | Ассистент | Что сделано | Где остановились |
 |---|------|-----------|-------------|------------------|
 | 1 | 2026-11-08 | Claude | Анализ двух прототипов; концепция и архитектура; созданы AGENTS.md, CONCEPT.md, PROGRESS.md | Начать фазу 1 (см. «Следующий шаг») |
-
-| 3 | 2026-11-08 | Claude (Sonnet 5.5) | Прогнаны check/discover/probe/build у пользователя; найдены потоки для 8 станций из списка + KOST, MYfm, ALT 98.7, KFI; добавлены `discover.ts`, `probe.ts`, `build.ts`; собран первый `stations.json` (13 станций) | Пересобрать каталог (`npm run build`), найти KRTH/KTWV/KKGO, затем JSON Schema и GitHub Actions |
+| 2 | 2026-11-08 | Claude | git init (коммит 7df990e), прототип перенесён в `legacy/`, создан `catalog/` (package.json, tsconfig, curated.yaml на 18 станций, `src/check.ts`); typecheck проходит; прогон проверки не удался из-за отсутствия сети в облаке | Пользователь запускает `npm run check` у себя и присылает таблицу |
