@@ -6,6 +6,8 @@
   "scripts": {
     "check": "tsx src/check.ts",
     "discover": "tsx src/discover.ts",
+    "probe": "tsx src/probe.ts",
+    "build": "tsx src/build.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

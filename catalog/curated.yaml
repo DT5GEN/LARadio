@@ -1,6 +1,8 @@
-# Curated Los Angeles stations. verified: false = candidate, not yet checked by catalog/src/check.ts
-# genres: first one is primary. Genre ids: see docs/CONCEPT.md section 4.2
-# StreamTheWorld prefix: https://playerservices.streamtheworld.com/api/livestream-redirect/
+# Curated Los Angeles stations.
+# quality is only a hint: build.ts classifies by measured bitrate (>=96 high, 48-95 medium, <48 low).
+# verified:false + no streams + no officialPlayer => omitted from stations.json.
+# Genre ids: see docs/CONCEPT.md section 4.2.
+# Discovered 2026-11-08 via Radio Browser (see PROGRESS.md).
 
 - id: kpwr
   name: POWER 106
@@ -9,9 +11,7 @@
   genres: [hiphop]
   homepage: https://www.power106.com/
   officialPlayer: https://player.listenlive.co/44031/
-  streams:
-    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/KPWRFM.mp3", quality: high }
-    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/KPWRFMAAC.aac", quality: medium }
+  streams: []   # old StreamTheWorld mounts return 404 (2026-11-08); search in progress (npm run probe)
 
 - id: krrl
   name: REAL 92.3
@@ -19,7 +19,8 @@
   frequency: 92.3 FM
   genres: [hiphop]
   officialPlayer: https://www.iheart.com/live/real-923-181/
-  streams: []
+  streams:   # iHeart id 181 -> revma zc181 (guess by pattern, build.ts verifies)
+    - { url: "https://stream.revma.ihrhls.com/zc181", quality: high }
 
 - id: kday
   name: 93.5 KDAY
@@ -28,7 +29,17 @@
   genres: [classic-hiphop]
   officialPlayer: https://player.listenlive.co/35791
   streams:
-    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/KDAYFM.mp3", quality: high }
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/KDAYFM.mp3", quality: medium }
+
+- id: kiis
+  name: 102.7 KIIS-FM
+  callsign: KIIS
+  frequency: 102.7 FM
+  genres: [top40]
+  officialPlayer: https://www.iheart.com/live/1027-kiis-fm-los-angeles-185/
+  streams:
+    - { url: "https://stream.revma.ihrhls.com/zc185", quality: high }
+    - { url: "https://stream.revma.ihrhls.com/zc185/hls.m3u8", quality: low }
 
 - id: klli
   name: CALI 93.9
@@ -37,8 +48,7 @@
   genres: [latin]
   officialPlayer: https://www.cali939.com/listen-live/
   streams:
-    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/KLLI_FMAAC.aac", quality: medium }
-    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/KLLI_FMAAC_SC", quality: medium }
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/KLLI_FMAAC.aac", quality: low }
 
 - id: kjlh
   name: 102.3 KJLH
@@ -47,25 +57,80 @@
   genres: [rnb]
   officialPlayer: https://www.kjlhradio.com/listenlive/
   streams:
+    - { url: "https://stream.abacast.net/direct/kjlh-kjlhfmaac-ibc2", quality: medium }
     - { url: "http://stream.abacast.net/direct/kjlh-kjlhfmaac-ibc2", quality: medium }
 
-- id: kiis
-  name: 102.7 KIIS-FM
-  callsign: KIIS
-  frequency: 102.7 FM
-  genres: [top40]
-  officialPlayer: https://www.iheart.com/live/1027-kiis-fm-los-angeles-185/
-  streams: []
+- id: kroq
+  name: 106.7 KROQ
+  callsign: KROQ
+  frequency: 106.7 FM
+  genres: [alternative]
+  homepage: https://www.audacy.com/kroq
+  streams:
+    - { url: "https://live.amperwave.net/direct/audacy-kroqfmaac-imc", quality: high }
+    - { url: "http://live.amperwave.net/direct/audacy-kroqfmaac-imc", quality: high }
 
-# --- Candidates (unverified, URLs to be found via Radio Browser in step 1.6) ---
-- { id: kroq, name: 106.7 KROQ, callsign: KROQ, frequency: 106.7 FM, genres: [alternative], streams: [], verified: false }
+- id: kkjz
+  name: KJazz 88.1
+  callsign: KKJZ
+  frequency: 88.1 FM
+  genres: [jazz]
+  homepage: https://kkjz.org/
+  streams:
+    - { url: "https://streaming.live365.com/a49833", quality: high }
+
+- id: kusc
+  name: Classical KUSC
+  callsign: KUSC
+  frequency: 91.5 FM
+  genres: [classical]
+  streams:
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/KUSCMP256.mp3", quality: high }
+    - { url: "https://14103.live.streamtheworld.com/KUSCAAC96_SC", quality: high }
+
+- id: kcrw
+  name: KCRW Santa Monica
+  callsign: KCRW
+  frequency: 89.9 FM
+  city: Santa Monica
+  genres: [eclectic]
+  homepage: https://www.kcrw.com/
+  streams:
+    - { url: "https://streams.kcrw.com/kcrw_mp3", quality: high }
+    - { url: "https://streams.kcrw.com/kcrw_aac", quality: high }
+
+- id: kcrw-e24
+  name: KCRW Eclectic 24
+  frequency: WEB
+  city: Santa Monica
+  genres: [eclectic]
+  homepage: https://www.kcrw.com/music/shows/eclectic24
+  streams:
+    - { url: "https://streams.kcrw.com/e24_mp3", quality: high }
+
+- id: kxlu
+  name: KXLU 88.9
+  callsign: KXLU
+  frequency: 88.9 FM
+  genres: [eclectic]
+  homepage: https://kxlu.com/
+  streams:
+    - { url: "https://kxlu.streamguys1.com/kxlu-hi", quality: high }
+    - { url: "http://kxlu.streamguys1.com/kxlu-hi", quality: high }
+    - { url: "http://kxlu.streamguys1.com/kxlu-lo", quality: low }
+
+- id: kpcc
+  name: LAist 89.3
+  callsign: KPCC
+  frequency: 89.3 FM
+  genres: [news]
+  homepage: https://laist.com/
+  streams:
+    - { url: "https://laist.streamguys1.com/kpcc-mp3", quality: high }
+
+# --- Still without streams (probe.ts looks for them) ---
 - { id: klos, name: 95.5 KLOS, callsign: KLOS, frequency: 95.5 FM, genres: [rock], streams: [], verified: false }
 - { id: krth, name: K-EARTH 101, callsign: KRTH, frequency: 101.1 FM, genres: [classic-hits], streams: [], verified: false }
-- { id: kkjz, name: KJazz 88.1, callsign: KKJZ, frequency: 88.1 FM, genres: [jazz], streams: [], verified: false }
-- { id: kusc, name: Classical KUSC, callsign: KUSC, frequency: 91.5 FM, genres: [classical], streams: [], verified: false }
-- { id: kcrw, name: KCRW, callsign: KCRW, frequency: 89.9 FM, genres: [eclectic], streams: [], verified: false }
-- { id: kxlu, name: KXLU, callsign: KXLU, frequency: 88.9 FM, genres: [eclectic], streams: [], verified: false }
-- { id: kpcc, name: LAist 89.3, callsign: KPCC, frequency: 89.3 FM, genres: [news], streams: [], verified: false }
 - { id: knx, name: KNX News 97.1, callsign: KNX, frequency: 97.1 FM, genres: [news], streams: [], verified: false }
 - { id: kkgo, name: Go Country 105, callsign: KKGO, frequency: 105.1 FM, genres: [country], streams: [], verified: false }
 - { id: ktwv, name: 94.7 The Wave, callsign: KTWV, frequency: 94.7 FM, genres: [rnb], streams: [], verified: false }
