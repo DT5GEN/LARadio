@@ -4,25 +4,26 @@
 > Архитектура — в `docs/CONCEPT.md`. Правила — в `AGENTS.md`.
 
 **Последнее обновление:** 2026-11-08 · **Кто:** Claude (сессия 2)
-**Текущая фаза:** 1 — Каталог станций (в работе).
+**Текущая фаза:** 2 — Android: каркас и воспроизведение (код написан, ждёт первой сборки).
 
 ---
 
 ## ▶ Следующий шаг (начинать отсюда)
 
-**Запустить проверку потоков на компьютере пользователя (Windows) и прислать результат.**
+**Пользователю — три действия (по порядку):**
+1. `cd E:\santa-monica-radio-pwa` → `git push -u origin main` (репозиторий `DT5GEN/LARadio`), затем на github.com: Settings → Pages → Source: **GitHub Actions**; Actions → «Build station catalog» → **Run workflow**. Каталог появится на `https://dt5gen.github.io/LARadio/stations.json`.
+2. `cd catalog` → `npm i` (добавлена зависимость `ajv`) → `npm run build` — проверить все 20 станций; ассистент читает `catalog\dist\report.md`.
+3. Открыть папку `android\` в **Android Studio**, дождаться Gradle sync, нажать Run на Pixel. **Код Android написан, но ещё НИ РАЗУ не компилировался** (у ассистента нет Android SDK). Ожидаются ошибки сборки: прислать их текст (вкладка Build) ассистенту — он исправит.
 
-В облачной среде ассистента нет выхода к сайтам радио (ошибка DNS `EAI_AGAIN`), поэтому `npm run check` работает только у пользователя или в GitHub Actions.
+**Ассистенту после этого:**
+- Исправить ошибки компиляции, добиться запуска и воспроизведения на Pixel (критерий готовности фазы 2).
+- Проверить в логе (`logcat`, тег `PlaybackService`) работу фолбэка потоков.
+- Потом фаза 3: ретро-UI, `FftTapProcessor` и столбики; фаза 4: эквалайзер, качество, буфер.
+- Не найдены потоки: K-EARTH 101 (KRTH), 94.7 The Wave (KTWV), Go Country 105 (KKGO).
 
-Команды для пользователя (PowerShell, нужен Node.js 20+):
-```
-cd E:\santa-monica-radio-pwa\catalog
-npm i
-npm run check
-```
-Результат (таблицу) вставить в чат ассистенту.
+**Версии Android-проекта (на 2026-11-08, не проверены сборкой):** AGP 8.9.1, Gradle 8.11.1, Kotlin 2.1.20, Compose BOM 2025.04.01, Media3 1.6.1, OkHttp 4.12.0, DataStore 1.1.4, compileSdk/targetSdk 35. Если Android Studio предложит обновление — принять и записать новые версии сюда.
 
-Дальше (задачи 1.6–1.8): `fetch-radiobrowser.ts` (станции LA из Radio Browser), затем `merge.ts` / `resolve.ts` / `classify.ts` / `build.ts` → `dist/stations.json`. По результатам проверки поправить `curated.yaml`: мёртвые потоки заменить найденными в Radio Browser, у кандидатов (`verified: false`) заполнить потоки.
+**Команды каталога** (из папки `catalog`): `npm run build` (проверка + `dist/stations.json`), `npm run build:offline` (без сети, для встроенной копии в APK), `npm run check`, `npm run discover`, `npm run probe`. Запускать на компьютере пользователя: в облаке ассистента нет доступа к сайтам радио.
 
 ---
 
@@ -32,7 +33,7 @@ npm run check
 |------|----------|--------|
 | 0 | Анализ прототипа и концепция | ✅ готово |
 | 1 | Каталог станций (`catalog/`) | 🔧 в работе |
-| 2 | Android: каркас и воспроизведение | ⬜ |
+| 2 | Android: каркас и воспроизведение | 🔧 код написан, не собран |
 | 3 | Android: ретро-UI и визуализатор | ⬜ |
 | 4 | Android: эквалайзер, качество, буфер | ⬜ |
 | 5 | Android: Android Auto и Car mode | ⬜ |
@@ -59,21 +60,21 @@ npm run check
 - [ ] 1.6 `fetch-radiobrowser.ts` — станции LA из Radio Browser
 - [ ] 1.7 `merge.ts`, `resolve.ts` (.pls/.m3u, редиректы), `classify.ts`
 - [ ] 1.8 `build.ts` → `dist/stations.json` по схеме CONCEPT §4.3 + `dist/report.md`
-- [ ] 1.9 JSON Schema + валидация в тестах
+- [x] 1.9 JSON Schema (`catalog/schema/stations.schema.json`) + валидация при каждой сборке в `build.ts` (отдельных тестов нет)
 - [~] 1.10 GitHub: репозиторий `DT5GEN/LARadio` (публичный), workflow `.github/workflows/catalog.yml` написан; осталось: `git push`, включить Pages (Source: GitHub Actions), запустить workflow. Ожидаемый URL каталога: `https://dt5gen.github.io/LARadio/stations.json`
-- [ ] 1.11 `design/tokens.json` (CONCEPT §8.2)
+- [x] 1.11 `design/tokens.json` (CONCEPT §8.2)
 
 **Готово, когда:** по публичному URL доступен `stations.json` с ≥ 15 живыми станциями LA минимум в 8 жанрах.
 
 ### Фаза 2 — Android: каркас и воспроизведение
-- [ ] 2.1 Проект в `android/` (Compose, Kotlin DSL, version catalog), `minSdk 26`
-- [ ] 2.2 `AppContainer`, OkHttp, kotlinx.serialization, `CatalogRepository` (remote → cache → `assets/stations.json`)
-- [ ] 2.3 `PlaybackService` (MediaLibraryService + ExoPlayer + MediaSession), уведомление
-- [ ] 2.4 `StreamSelector` + фолбэк потоков (таймаут 8 с) + «Официальный плеер»
-- [ ] 2.5 ICY «что играет» в метаданных сессии
-- [ ] 2.6 Простые экраны: жанры → станции → play/stop, мини-плеер
-- [ ] 2.7 Избранное и недавние (Room), последняя станция (DataStore)
-- [ ] 2.8 `network_security_config.xml` для HTTP-станций (KJLH)
+- [~] 2.1 Проект в `android/` (Compose, Kotlin DSL, version catalog), `minSdk 26`
+- [~] 2.2 `AppContainer`, OkHttp, kotlinx.serialization, `CatalogRepository` (remote → cache → `assets/stations.json`)
+- [~] 2.3 `PlaybackService` (MediaLibraryService + ExoPlayer + MediaSession), уведомление
+- [~] 2.4 `StreamSelector` + фолбэк потоков (таймаут 8 с) + «Официальный плеер»
+- [~] 2.5 ICY «что играет»: берётся из `MediaMetadata.title` (ExoPlayer подставляет трек вместо названия станции); не проверено на устройстве
+- [~] 2.6 Простые экраны: жанры → станции → play/stop, мини-плеер
+- [~] 2.7 Избранное (DataStore, без Room) — написано; «недавние» и «последняя станция» ещё нет
+- [~] 2.8 `network_security_config.xml` для HTTP-станций (KJLH)
 
 **Готово, когда:** на Pixel играет любая станция каталога, звук не прерывается при выключенном экране 30 мин, работают кнопки Bluetooth-наушников.
 
@@ -145,6 +146,9 @@ npm run check
 | D-004 | 2026-11-08 | Авторизации iHeartRadio нет; только добавление живых станций по ссылке/поиску | Нет публичного API, логин через неофициальный API нарушает их условия и требует хранить пароль |
 | D-005 | 2026-11-08 | Каталог собирается в GitHub Actions и хостится на GitHub Pages | Бесплатно, не нужен свой сервер для данных |
 | D-006 | 2026-11-08 | Таймаут старта потока 8 с (было 1.5 с) | 1.5 с недостаточно для редиректа и буферизации, рабочие потоки пропускались |
+| D-008 | 2026-11-08 | Избранное в Android хранится в DataStore, а не в Room (на старте) | Не нужен KSP/кодогенерация, меньше риска сломать первую сборку; Room вернём при росте данных |
+| D-009 | 2026-11-08 | Cleartext HTTP разрешён для всех доменов | Личное приложение; многие радио-потоки HTTP или редиректят между http/https |
+| D-010 | 2026-11-08 | Основной интерфейс на русском (строки в коде, `object T` в `Screens.kt`) | Пользователь читает по-английски с трудом; вопрос Q6 (второй язык) остаётся открытым |
 | D-007 | 2026-11-08 | Документы по-русски, код по-английски; PROGRESS.md обновляется в конце каждой сессии | Возможна смена ассистента (лимиты), пользователь читает по-английски с трудом |
 
 ---
@@ -166,3 +170,4 @@ npm run check
 |---|------|-----------|-------------|------------------|
 | 1 | 2026-11-08 | Claude | Анализ двух прототипов; концепция и архитектура; созданы AGENTS.md, CONCEPT.md, PROGRESS.md | Начать фазу 1 (см. «Следующий шаг») |
 | 2 | 2026-11-08 | Claude | git init (коммит 7df990e), прототип перенесён в `legacy/`, создан `catalog/` (package.json, tsconfig, curated.yaml на 18 станций, `src/check.ts`); typecheck проходит; прогон проверки не удался из-за отсутствия сети в облаке | Пользователь запускает `npm run check` у себя и присылает таблицу |
+| 4 | 2026-11-08 | Claude (Sonnet 5.5) | Закрыта фаза 1 (JSON Schema, `build:offline`, design tokens, workflow GitHub Actions); создан Android-проект: Gradle, каталог, PlaybackService с фолбэком потоков и деревом для Android Auto, экраны жанры/станции/избранное/мини-плеер; встроен каталог на 20 станций | Выложить на GitHub, собрать Android в Android Studio и прислать ошибки сборки |
