@@ -43,6 +43,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -498,18 +499,23 @@ private fun LandscapeShell(
         Row(Modifier.weight(1f).fillMaxWidth()) {
             Box(Modifier.weight(3f).fillMaxHeight()) { content() }
             Column(
-                Modifier.weight(1f).fillMaxHeight().verticalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 6.dp),
-                verticalArrangement = Arrangement.spacedBy(6.dp),
+                Modifier.weight(1f).fillMaxHeight().padding(horizontal = 8.dp, vertical = 6.dp),
+                verticalArrangement = Arrangement.SpaceBetween,
             ) {
-                if (canBack) SideButton("‹ НАЗАД", onBack)
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
+                // fixed slots: nothing jumps when "back" appears; playback sits at the bottom, under the thumb
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Box(Modifier.alpha(if (canBack) 1f else 0f)) {
+                        SideButton("‹ НАЗАД", if (canBack) onBack else ({}))
+                    }
+                    SideButton("EQ", onEq, active = eqOn)
+                    SideButton("МАШИНА", onCar)
+                    SideButton(T.SETTINGS, onSettings)
+                }
+                Row(Modifier.fillMaxWidth().padding(bottom = 2.dp), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
                     PlayerButton("⏮", onPrev)
                     PlayerButton(if (ui.isPlaying || ui.buffering || ui.reconnecting || ui.offline) "⏸" else "▶", onToggle, big = true)
                     PlayerButton("⏭", onNext)
                 }
-                SideButton("EQ", onEq, active = eqOn)
-                SideButton("МАШИНА", onCar)
-                SideButton(T.SETTINGS, onSettings)
             }
         }
         if (ui.stationId != null) {

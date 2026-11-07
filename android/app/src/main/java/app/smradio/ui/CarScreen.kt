@@ -87,13 +87,14 @@ fun CarScreen(
                 CarList(Modifier.weight(2f).fillMaxHeight(), catalog, favorites, ui, genre, compact = true, onPlay = onPlay, onGenre = { genreId = it })
                 Column(
                     Modifier.weight(1f).fillMaxHeight().padding(horizontal = 8.dp, vertical = 4.dp),
-                    verticalArrangement = Arrangement.SpaceEvenly,
+                    verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     CarTextButton(if (genre != null) "‹ ЖАНРЫ" else "‹ ВЫХОД") { if (genre != null) genreId = null else onExit() }
-                    CarButton(if (playing) "⏸" else "▶", 72, onToggle, filled = true)
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    // playback at the bottom, next to the status line, under the thumb
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
                         CarButton("⏮", 56, onPrev)
+                        CarButton(if (playing) "⏸" else "▶", 72, onToggle, filled = true)
                         CarButton("⏭", 56, onNext)
                     }
                 }
