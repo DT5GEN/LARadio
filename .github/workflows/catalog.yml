@@ -29,6 +29,10 @@ jobs:
           cache-dependency-path: catalog/package-lock.json
       - run: npm ci
         working-directory: catalog
+      - name: Import LA stations from Radio Browser
+        run: npm run import
+        working-directory: catalog
+        continue-on-error: true
       - run: npm run build
         working-directory: catalog
       - name: Add to job summary
