@@ -1,14 +1,14 @@
-# Curated Spanish stations (region "es").
-# Streams marked "guess" are unverified patterns: build.ts checks every stream and silently drops dead ones,
-# so a wrong guess is harmless. Real discoveries: run `npm run discover` / `npm run probe` on your PC.
+# Curated Spanish stations (region "es"). URLs come from the TDTChannels list (github.com/LaQuay/TDTChannels).
+# build.ts checks every stream and drops dead ones. More stations are added automatically by `npm run import`
+# (TDTChannels + Radio Browser + catalog/imports/es/*.m3u).
 
 - id: es-cadena-ser
   name: Cadena SER
-  callsign: SER
   frequency: WEB
   genres: [news]
   homepage: https://cadenaser.com/
-  streams:   # guess (StreamTheWorld mount)
+  streams:
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/CADENASERAAC.aac", quality: medium }
     - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/CADENASER.mp3", quality: high }
 
 - id: es-los40
@@ -16,22 +16,57 @@
   frequency: WEB
   genres: [top40]
   homepage: https://los40.com/
-  streams:   # guess
-    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/LOS40.mp3", quality: high }
+  streams:
     - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/LOS40AAC.aac", quality: medium }
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/LOS40.mp3", quality: high }
 
 - id: es-cadena-dial
   name: Cadena Dial
   frequency: WEB
   genres: [latin]
   homepage: https://play.cadenadial.com/
-  streams:   # guess
-    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/CADENADIAL.mp3", quality: high }
+  streams:
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/CADENADIALAAC.aac", quality: medium }
 
 - id: es-cadena-100
   name: Cadena 100
   frequency: WEB
   genres: [adult]
   homepage: https://www.cadena100.es/
-  streams:   # guess
-    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/CADENA100.mp3", quality: high }
+  streams:
+    - { url: "https://cadena100-cope.flumotion.com/playlist.m3u8", quality: high }
+
+- id: es-kiss-fm
+  name: Kiss FM
+  frequency: WEB
+  genres: [top40]
+  streams:
+    - { url: "https://kissfm.kissfmradio.cires21.com/kissfm.mp3", quality: medium }
+
+- id: es-europa-fm
+  name: Europa FM
+  frequency: WEB
+  genres: [top40]
+  streams:
+    - { url: "https://radio-atres-live.ondacero.es/api/livestream-redirect/EFMAAC.aac", quality: medium }
+
+- id: es-radio-3
+  name: Radio 3 (RNE)
+  frequency: WEB
+  genres: [alternative]
+  streams:
+    - { url: "https://rtvelivestream.rtve.es/rtvesec/rne/rne_r3_main.m3u8", quality: high }
+
+- id: es-radio-clasica
+  name: Radio Clásica (RNE)
+  frequency: WEB
+  genres: [classical]
+  streams:
+    - { url: "https://rtvelivestream.rtve.es/rtvesec/rne/rne_r2_main.m3u8", quality: high }
+
+- id: es-radio-nacional
+  name: Radio Nacional (RNE)
+  frequency: WEB
+  genres: [news]
+  streams:
+    - { url: "https://rtvelivestream.rtve.es/rtvesec/rne/rne_r1_main.m3u8", quality: high }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-07T23:42:50.856Z",
+  "generatedAt": "2026-11-07T23:48:27.767Z",
   "bundled": true,
   "region": {
     "id": "la",
@@ -155,7 +155,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.766Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -189,7 +189,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.766Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -223,7 +223,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.766Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -257,7 +257,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.766Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -271,7 +271,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.766Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -305,7 +305,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.766Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -339,7 +339,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.766Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -353,7 +353,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.766Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -387,7 +387,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.766Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -401,7 +401,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.766Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -435,7 +435,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -469,7 +469,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -483,7 +483,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -517,7 +517,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -531,7 +531,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -565,7 +565,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -599,7 +599,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -613,7 +613,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -627,7 +627,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -641,7 +641,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -675,7 +675,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -709,7 +709,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -723,7 +723,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -757,7 +757,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -791,7 +791,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -825,7 +825,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -859,7 +859,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -893,7 +893,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -927,7 +927,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -941,7 +941,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -952,7 +952,7 @@
     {
       "id": "es-cadena-ser",
       "name": "Cadena SER",
-      "callsign": "SER",
+      "callsign": null,
       "frequency": "WEB",
       "region": "es",
       "city": "España",
@@ -975,7 +975,21 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/CADENASERAAC.aac",
+          "format": "aac",
+          "bitrate": null,
+          "quality": "medium",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -1009,7 +1023,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -1023,7 +1037,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -1049,15 +1063,15 @@
       "radioBrowserUuid": null,
       "streams": [
         {
-          "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/CADENADIAL.mp3",
-          "format": "mp3",
+          "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/CADENADIALAAC.aac",
+          "format": "aac",
           "bitrate": null,
-          "quality": "high",
+          "quality": "medium",
           "https": true,
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -1083,15 +1097,185 @@
       "radioBrowserUuid": null,
       "streams": [
         {
-          "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/CADENA100.mp3",
-          "format": "mp3",
+          "url": "https://cadena100-cope.flumotion.com/playlist.m3u8",
+          "format": "hls",
           "bitrate": null,
           "quality": "high",
           "https": true,
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "es-kiss-fm",
+      "name": "Kiss FM",
+      "callsign": null,
+      "frequency": "WEB",
+      "region": "es",
+      "city": "España",
+      "genres": [
+        "top40"
+      ],
+      "description": "Top 40 / Pop",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://kissfm.kissfmradio.cires21.com/kissfm.mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "medium",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:48:27.767Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "es-europa-fm",
+      "name": "Europa FM",
+      "callsign": null,
+      "frequency": "WEB",
+      "region": "es",
+      "city": "España",
+      "genres": [
+        "top40"
+      ],
+      "description": "Top 40 / Pop",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://radio-atres-live.ondacero.es/api/livestream-redirect/EFMAAC.aac",
+          "format": "aac",
+          "bitrate": null,
+          "quality": "medium",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:48:27.767Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "es-radio-3",
+      "name": "Radio 3 (RNE)",
+      "callsign": null,
+      "frequency": "WEB",
+      "region": "es",
+      "city": "España",
+      "genres": [
+        "alternative"
+      ],
+      "description": "Alternative",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://rtvelivestream.rtve.es/rtvesec/rne/rne_r3_main.m3u8",
+          "format": "hls",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:48:27.767Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "es-radio-clasica",
+      "name": "Radio Clásica (RNE)",
+      "callsign": null,
+      "frequency": "WEB",
+      "region": "es",
+      "city": "España",
+      "genres": [
+        "classical"
+      ],
+      "description": "Classical",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://rtvelivestream.rtve.es/rtvesec/rne/rne_r2_main.m3u8",
+          "format": "hls",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:48:27.767Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "es-radio-nacional",
+      "name": "Radio Nacional (RNE)",
+      "callsign": null,
+      "frequency": "WEB",
+      "region": "es",
+      "city": "España",
+      "genres": [
+        "news"
+      ],
+      "description": "News & Talk",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://rtvelivestream.rtve.es/rtvesec/rne/rne_r1_main.m3u8",
+          "format": "hls",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -1117,7 +1301,7 @@
       "radioBrowserUuid": null,
       "streams": [
         {
-          "url": "https://http-live.sr.se/p1-mp3-192",
+          "url": "https://live1.sr.se/p1-aac-320",
           "format": "mp3",
           "bitrate": null,
           "quality": "high",
@@ -1125,21 +1309,35 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
         },
         {
-          "url": "https://http-live.sr.se/p1-aac-192",
+          "url": "https://live1.sr.se/p1-aac-128",
           "format": "mp3",
           "bitrate": null,
-          "quality": "high",
+          "quality": "medium",
           "https": true,
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://sverigesradio.se/topsy/direkt/srapi/132.mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "medium",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -1165,7 +1363,7 @@
       "radioBrowserUuid": null,
       "streams": [
         {
-          "url": "https://http-live.sr.se/p2-mp3-192",
+          "url": "https://live1.sr.se/p2-aac-320",
           "format": "mp3",
           "bitrate": null,
           "quality": "high",
@@ -1173,7 +1371,35 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://live1.sr.se/p2-aac-128",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "medium",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:48:27.767Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://sverigesradio.se/topsy/direkt/srapi/163.mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "medium",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -1199,7 +1425,7 @@
       "radioBrowserUuid": null,
       "streams": [
         {
-          "url": "https://http-live.sr.se/p3-mp3-192",
+          "url": "https://live1.sr.se/p3-aac-320",
           "format": "mp3",
           "bitrate": null,
           "quality": "high",
@@ -1207,7 +1433,35 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://live1.sr.se/p3-aac-128",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "medium",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:48:27.767Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://sverigesradio.se/topsy/direkt/srapi/164.mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "medium",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -1233,7 +1487,7 @@
       "radioBrowserUuid": null,
       "streams": [
         {
-          "url": "https://http-live.sr.se/p4stockholm-mp3-192",
+          "url": "https://live1.sr.se/p4stockholm-aac-320",
           "format": "mp3",
           "bitrate": null,
           "quality": "high",
@@ -1241,7 +1495,35 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://live1.sr.se/p4stockholm-aac-128",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "medium",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:48:27.767Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://sverigesradio.se/topsy/direkt/srapi/701.mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "medium",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -1275,7 +1557,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T23:42:50.856Z",
+            "at": "2026-11-07T23:48:27.767Z",
             "latencyMs": null,
             "contentType": null
           }

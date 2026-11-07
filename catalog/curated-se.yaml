@@ -1,5 +1,6 @@
-# Curated Swedish stations (region "se"). Sveriges Radio publishes open streams (http-live.sr.se).
-# "guess" entries are unverified patterns; build.ts drops dead ones.
+# Curated Swedish stations (region "se"). Sveriges Radio streams: live1.sr.se/<channel>-aac-320|128 (current pattern,
+# the old http-live.sr.se mounts were shut down in 2025). The legacy srapi URLs redirect to the new streams.
+# More stations are added by `npm run import` (Radio Browser SE + catalog/imports/se/*.m3u).
 
 - id: se-sr-p1
   name: Sveriges Radio P1
@@ -7,8 +8,9 @@
   genres: [news]
   homepage: https://sverigesradio.se/p1
   streams:
-    - { url: "https://http-live.sr.se/p1-mp3-192", quality: high }
-    - { url: "https://http-live.sr.se/p1-aac-192", quality: high }
+    - { url: "https://live1.sr.se/p1-aac-320", quality: high }
+    - { url: "https://live1.sr.se/p1-aac-128", quality: medium }
+    - { url: "https://sverigesradio.se/topsy/direkt/srapi/132.mp3", quality: medium }
 
 - id: se-sr-p2
   name: Sveriges Radio P2
@@ -16,7 +18,9 @@
   genres: [classical]
   homepage: https://sverigesradio.se/p2
   streams:
-    - { url: "https://http-live.sr.se/p2-mp3-192", quality: high }
+    - { url: "https://live1.sr.se/p2-aac-320", quality: high }
+    - { url: "https://live1.sr.se/p2-aac-128", quality: medium }
+    - { url: "https://sverigesradio.se/topsy/direkt/srapi/163.mp3", quality: medium }
 
 - id: se-sr-p3
   name: Sveriges Radio P3
@@ -24,7 +28,9 @@
   genres: [top40]
   homepage: https://sverigesradio.se/p3
   streams:
-    - { url: "https://http-live.sr.se/p3-mp3-192", quality: high }
+    - { url: "https://live1.sr.se/p3-aac-320", quality: high }
+    - { url: "https://live1.sr.se/p3-aac-128", quality: medium }
+    - { url: "https://sverigesradio.se/topsy/direkt/srapi/164.mp3", quality: medium }
 
 - id: se-sr-p4-stockholm
   name: P4 Stockholm
@@ -32,7 +38,9 @@
   genres: [adult]
   homepage: https://sverigesradio.se/stockholm
   streams:
-    - { url: "https://http-live.sr.se/p4stockholm-mp3-192", quality: high }
+    - { url: "https://live1.sr.se/p4stockholm-aac-320", quality: high }
+    - { url: "https://live1.sr.se/p4stockholm-aac-128", quality: medium }
+    - { url: "https://sverigesradio.se/topsy/direkt/srapi/701.mp3", quality: medium }
 
 - id: se-rix-fm
   name: Rix FM
