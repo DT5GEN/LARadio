@@ -60,7 +60,7 @@ npm run check
 - [ ] 1.7 `merge.ts`, `resolve.ts` (.pls/.m3u, редиректы), `classify.ts`
 - [ ] 1.8 `build.ts` → `dist/stations.json` по схеме CONCEPT §4.3 + `dist/report.md`
 - [ ] 1.9 JSON Schema + валидация в тестах
-- [ ] 1.10 GitHub репозиторий + Actions (ежедневно) + GitHub Pages
+- [~] 1.10 GitHub: репозиторий `DT5GEN/LARadio` (публичный), workflow `.github/workflows/catalog.yml` написан; осталось: `git push`, включить Pages (Source: GitHub Actions), запустить workflow. Ожидаемый URL каталога: `https://dt5gen.github.io/LARadio/stations.json`
 - [ ] 1.11 `design/tokens.json` (CONCEPT §8.2)
 
 **Готово, когда:** по публичному URL доступен `stations.json` с ≥ 15 живыми станциями LA минимум в 8 жанрах.
@@ -129,7 +129,7 @@ npm run check
 | Q1 | Финальное название приложения | Santa Monica Radio / LA Radio / своё | до фазы 8 (рабочее — Santa Monica Radio) |
 | Q2 | `applicationId` | `app.smradio` (рабочий) или свой домен | до фазы 2 (менять потом неудобно) |
 | Q3 | Где хостить relay | VPS (~$4–6/мес) / домашний ПК + Cloudflare Tunnel | до фазы 6 |
-| Q4 | GitHub-аккаунт и имя репозитория, публичный или приватный | — | фаза 1.10 |
+| Q4 | ~~GitHub-репозиторий~~ **решено:** публичный `https://github.com/DT5GEN/LARadio` | — | — |
 | Q5 | Скин по умолчанию | green (как прототип) / amber / blue | фаза 3 |
 | Q6 | Нужен ли русский интерфейс помимо английского | да / нет | фаза 2 |
 
