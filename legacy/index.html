@@ -1,0 +1,103 @@
+<!--
+README
+======
+Santa Monica Radio PWA
+
+Files:
+  index.html
+  styles.css
+  app.js
+  manifest.webmanifest
+  service-worker.js
+  icons/icon-192.png
+  icons/icon-512.png
+
+Run locally:
+  A service worker cannot be registered from file:// in normal browsers.
+  For the full PWA/offline/install experience, serve this folder from localhost,
+  for example:
+    python -m http.server 8080
+  then open:
+    http://localhost:8080/
+
+On Android:
+  Open the app over HTTPS or localhost-compatible development tooling.
+  When the browser exposes the install prompt, tap "Install app".
+  On Chrome Android, the app can also appear under the browser's
+  "Add to Home screen" / "Install app" menu.
+
+Notes:
+  - Radio streams are third-party resources and may change, reject CORS,
+    require DRM, or become unavailable.
+  - REAL 92.3 and 102.7 KIIS-FM intentionally use official-player fallback only.
+  - KJLH's HTTP stream may be blocked when this PWA is served over HTTPS.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07120d">
+  <meta name="description" content="Six-station retro Los Angeles radio player PWA">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png" type="image/png">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Santa Monica Radio</title>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">FM / LOS ANGELES / LIVE</p>
+      <h1>Santa Monica Radio</h1>
+      <p class="subtitle">Beach air. Boom-bap. Neon meters.</p>
+    </div>
+    <div class="boombox" aria-hidden="true">
+      <span class="handle"></span>
+      <span class="speaker left"></span>
+      <span class="speaker right"></span>
+      <span class="deck"></span>
+      <span class="antenna"></span>
+    </div>
+    <button id="installBtn" class="install-btn" type="button" hidden>Install app</button>
+  </header>
+
+  <main class="app-shell">
+    <section aria-labelledby="stations-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">SELECT A FREQUENCY</p>
+          <h2 id="stations-heading">Stations</h2>
+        </div>
+        <div id="statusPill" class="status-pill" aria-live="polite">IDLE</div>
+      </div>
+      <div id="stations" class="stations"></div>
+    </section>
+
+    <section class="console" aria-labelledby="console-heading">
+      <div class="console-title">
+        <h2 id="console-heading">RADIO CONSOLE</h2>
+        <span>LIVE MONITOR</span>
+      </div>
+      <div id="equalizer" class="equalizer" role="img" aria-label="Retro dot matrix equalizer"></div>
+      <div id="logWindow" class="log-window" aria-live="polite" aria-atomic="false"></div>
+    </section>
+  </main>
+
+  <div id="notificationBanner" class="notification-banner" role="dialog" aria-labelledby="notificationTitle" hidden>
+    <div>
+      <strong id="notificationTitle">Allow notifications?</strong>
+      <p>Get a small local notification when playback starts.</p>
+    </div>
+    <div class="banner-actions">
+      <button id="allowNotifications" class="btn primary" type="button">Allow</button>
+      <button id="denyNotifications" class="btn" type="button">Not now</button>
+    </div>
+  </div>
+
+  <noscript>
+    <div class="noscript">JavaScript is required for the radio controls and equalizer.</div>
+  </noscript>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
