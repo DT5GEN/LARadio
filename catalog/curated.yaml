@@ -11,7 +11,8 @@
   genres: [hiphop]
   homepage: https://www.power106.com/
   officialPlayer: https://player.listenlive.co/44031/
-  streams: []   # old StreamTheWorld mounts return 404 (2026-11-08); search in progress (npm run probe)
+  streams:   # old mounts KPWRFM/KPWRFMAAC return 404 since 2026-11; KPWR_SC found by probe
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/KPWR_SC", quality: medium }
 
 - id: krrl
   name: REAL 92.3
@@ -117,6 +118,7 @@
   streams:
     - { url: "https://kxlu.streamguys1.com/kxlu-hi", quality: high }
     - { url: "http://kxlu.streamguys1.com/kxlu-hi", quality: high }
+    - { url: "https://kxlu.streamguys1.com/kxlu-lo", quality: low }
     - { url: "http://kxlu.streamguys1.com/kxlu-lo", quality: low }
 
 - id: kpcc
@@ -129,9 +131,69 @@
     - { url: "https://laist.streamguys1.com/kpcc-mp3", quality: high }
 
 # --- Still without streams (probe.ts looks for them) ---
-- { id: klos, name: 95.5 KLOS, callsign: KLOS, frequency: 95.5 FM, genres: [rock], streams: [], verified: false }
 - { id: krth, name: K-EARTH 101, callsign: KRTH, frequency: 101.1 FM, genres: [classic-hits], streams: [], verified: false }
-- { id: knx, name: KNX News 97.1, callsign: KNX, frequency: 97.1 FM, genres: [news], streams: [], verified: false }
 - { id: kkgo, name: Go Country 105, callsign: KKGO, frequency: 105.1 FM, genres: [country], streams: [], verified: false }
 - { id: ktwv, name: 94.7 The Wave, callsign: KTWV, frequency: 94.7 FM, genres: [rnb], streams: [], verified: false }
-- { id: klax, name: 97.9 La Raza, callsign: KLAX, frequency: 97.9 FM, genres: [latin], streams: [], verified: false }
+
+- id: klos
+  name: 95.5 KLOS
+  callsign: KLOS
+  frequency: 95.5 FM
+  genres: [rock]
+  streams:
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/KLOSFM.mp3", quality: high }
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/KLOSFMAAC.aac", quality: medium }
+
+- id: knx
+  name: KNX News 97.1
+  callsign: KNX
+  frequency: 97.1 FM
+  genres: [news]
+  streams:
+    - { url: "https://live.amperwave.net/direct/audacy-knxfmaac-imc", quality: high }
+
+- id: klax
+  name: 97.9 La Raza
+  callsign: KLAX
+  frequency: 97.9 FM
+  genres: [latin]
+  streams:
+    - { url: "https://liveaudio.lamusica.com/LA_KLAX_icy", quality: high }
+
+# iHeart stations: direct revma streams, id = number from the iheart.com URL (no login needed)
+- id: kost
+  name: KOST 103.5
+  callsign: KOST
+  frequency: 103.5 FM
+  genres: [adult]
+  officialPlayer: https://www.iheart.com/live/kost-1035-193/
+  streams:
+    - { url: "https://stream.revma.ihrhls.com/zc193", quality: high }
+
+- id: kbig
+  name: 104.3 MYfm
+  callsign: KBIG
+  frequency: 104.3 FM
+  genres: [adult]
+  officialPlayer: https://www.iheart.com/live/1043-myfm-173/
+  streams:
+    - { url: "https://stream.revma.ihrhls.com/zc173", quality: high }
+
+- id: kysr
+  name: ALT 98.7
+  callsign: KYSR
+  frequency: 98.7 FM
+  genres: [alternative]
+  officialPlayer: https://www.iheart.com/live/alt-987-201/
+  streams:
+    - { url: "https://stream.revma.ihrhls.com/zc201", quality: high }
+
+- id: kfi
+  name: KFI AM 640
+  callsign: KFI
+  frequency: 640 AM
+  genres: [news]
+  officialPlayer: https://www.iheart.com/live/kfi-am-640-177/
+  streams:
+    - { url: "https://stream.revma.ihrhls.com/zc177", quality: high }
+    - { url: "https://stream.revma.ihrhls.com/zc177/hls.m3u8", quality: low }

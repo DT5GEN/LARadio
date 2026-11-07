@@ -10,16 +10,23 @@
 
 ## ▶ Следующий шаг (начинать отсюда)
 
-**Фаза 1, задачи 1.1–1.4:** подготовить репозиторий и создать модуль `catalog/`.
+**1. Пользователю: пересобрать каталог** (в `curated.yaml` добавлены 7 станций и потоки KPWR/KLOS/KNX/KLAX; нужна проверка):
+```
+cd E:\santa-monica-radio-pwa\catalog
+npm run build
+```
+Ассистент читает `catalog\dist\report.md` и `catalog\dist\stations.json` прямо из папки.
 
-1. Инициализировать git в `E:\santa-monica-radio-pwa`, добавить `.gitignore` (Node, Android, `.env`, `*.jks`, `keystore.properties`, `local.properties`).
-2. Перенести старый прототип (`index.html`, `app.js`, `styles.css`, `service-worker.js`, `manifest.webmanifest`, `icons/`) в `legacy/` — **перемещением, не удалением**. Положить туда же `la_hiphop_radio_player_v3.html`, если пользователь пришлёт его в папку.
-3. Создать `catalog/` (Node 20 + TypeScript, `tsx` для запуска): `package.json`, `tsconfig.json`, `curated.yaml` с 6 станциями из прототипа (CONCEPT §4.6) + кандидатами из CONCEPT §4.2.
-4. Написать `src/check.ts` и вывести отчёт: какие потоки живы, `content-type`, битрейт, время ответа.
+**2. Ассистенту — оставшиеся задачи фазы 1:**
+- Станции без потоков: **K-EARTH 101 (KRTH), 94.7 The Wave (KTWV), Go Country 105 (KKGO)** — искать (Audacy: mount с `audacy-...-imc` не подошли; пробовать страницу станции / `streamtheworld` API-xml / Radio Browser по тегам). Пока не попадают в каталог.
+- 1.9 JSON Schema для `stations.json` + проверка в `build`.
+- 1.10 GitHub-репозиторий + Actions (ежедневная сборка) + GitHub Pages — нужен GitHub-аккаунт пользователя (вопрос Q4).
+- 1.11 `design/tokens.json` (CONCEPT §8.2).
+- Позже: `.pls/.m3u` resolve и автослияние с Radio Browser (сейчас список ведётся вручную в `curated.yaml`, поиск — `npm run discover` / `npm run probe`).
 
-**Как проверить:** `cd catalog && npm i && npm run check` печатает таблицу станций со статусом OK/FAIL.
+Потом — Фаза 2 (Android). Перед ней решить Q2 (`applicationId`) и Q6 (русский интерфейс).
 
-**Важно:** проверку потоков нужно запускать **с компьютера пользователя или из GitHub Actions** — облачные песочницы ассистентов часто не имеют доступа к произвольным сайтам.
+**Команды каталога:** `npm run check` (проверка потоков), `npm run discover` / `npm run probe` (поиск потоков, отчёты `discover-report.md` / `probe-report.md`), `npm run build` (→ `dist/stations.json`). Запускать на компьютере пользователя: в облаке ассистента нет доступа к сайтам радио.
 
 ---
 
@@ -53,9 +60,9 @@
 - [ ] 1.3 Каркас `catalog/` (TS, `tsx`, `yaml`, `undici`)
 - [ ] 1.4 `curated.yaml` — 6 станций прототипа + кандидаты из CONCEPT §4.2 (с пометкой «не проверено»)
 - [ ] 1.5 `check.ts` — проверка потоков (ICY-заголовки, content-type, битрейт, задержка)
-- [ ] 1.6 `fetch-radiobrowser.ts` — станции LA из Radio Browser
-- [ ] 1.7 `merge.ts`, `resolve.ts` (.pls/.m3u, редиректы), `classify.ts`
-- [ ] 1.8 `build.ts` → `dist/stations.json` по схеме CONCEPT §4.3 + `dist/report.md`
+- [~] 1.6 Поиск в Radio Browser — сделан как `discover.ts` + `probe.ts` (поиск вручную, с отчётом); автоматический `fetch-radiobrowser.ts` отложен
+- [~] 1.7 `classify` встроен в `build.ts`; `merge.ts` и `resolve.ts` (.pls/.m3u) отложены — пока список ведётся вручную
+- [x] 1.8 `build.ts` → `dist/stations.json` по схеме CONCEPT §4.3 + `dist/report.md` (первый прогон: 13 станций, все потоки живы)
 - [ ] 1.9 JSON Schema + валидация в тестах
 - [ ] 1.10 GitHub репозиторий + Actions (ежедневно) + GitHub Pages
 - [ ] 1.11 `design/tokens.json` (CONCEPT §8.2)
@@ -156,8 +163,19 @@
 
 ---
 
+## Найденные факты о потоках (2026-11-08)
+
+- **iHeart-станции играют без входа:** `https://stream.revma.ihrhls.com/zc<N>`, где N — число из конца ссылки iheart.com (KIIS 185, REAL 92.3 181, KOST 193, MYfm 173, ALT 98.7 201, KFI 177). Есть и HLS: `.../zc<N>/hls.m3u8`. Подтверждено проверкой.
+- **Audacy (KROQ, KNX):** `https://live.amperwave.net/direct/audacy-<позывной><fm|am>aac-imc`. KRTH и KTWV по этому шаблону не нашлись.
+- **StreamTheWorld:** у POWER 106 новый mount `KPWR_SC` (старые `KPWRFM*` дают 404). KLOS: `KLOSFM.mp3`, `KLOSFMAAC.aac`. KDAY — `KDAYFM.mp3` (48 кбит/с, довольно тихий поток).
+- **KCRW** находится в Санта-Монике (отсюда имя проекта): `streams.kcrw.com/kcrw_mp3`, `kcrw_aac`, `e24_mp3`.
+- Большинство потоков отдают ICY-метаданные («что играет»). HTTPS есть почти везде; HTTP-only варианты оставлены как запасные.
+- KXLU: `kxlu-hi` 320 кбит/с (тяжёлый), `kxlu-lo` AAC 48 кбит/с.
+
 ## Журнал сессий
 
 | № | Дата | Ассистент | Что сделано | Где остановились |
 |---|------|-----------|-------------|------------------|
 | 1 | 2026-11-08 | Claude | Анализ двух прототипов; концепция и архитектура; созданы AGENTS.md, CONCEPT.md, PROGRESS.md | Начать фазу 1 (см. «Следующий шаг») |
+
+| 3 | 2026-11-08 | Claude (Sonnet 5.5) | Прогнаны check/discover/probe/build у пользователя; найдены потоки для 8 станций из списка + KOST, MYfm, ALT 98.7, KFI; добавлены `discover.ts`, `probe.ts`, `build.ts`; собран первый `stations.json` (13 станций) | Пересобрать каталог (`npm run build`), найти KRTH/KTWV/KKGO, затем JSON Schema и GitHub Actions |

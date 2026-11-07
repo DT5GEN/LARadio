@@ -19,6 +19,7 @@ const GENRES = [
   { id: "classical", name: "Classical", nameRu: "Классика", color: "#d9d9ff" },
   { id: "eclectic", name: "Eclectic & Public", nameRu: "Независимое", color: "#7affd0" },
   { id: "country", name: "Country", nameRu: "Кантри", color: "#d8a35a" },
+  { id: "adult", name: "Adult Contemporary", nameRu: "Лёгкая музыка", color: "#ffb0c8" },
   { id: "news", name: "News & Talk", nameRu: "Новости", color: "#a8b7ad" },
 ].map((g, i) => ({ ...g, order: i + 1 }));
 
