@@ -78,6 +78,7 @@ fun AppRoot(vm: PlayerViewModel) {
     var genreId by rememberSaveable { mutableStateOf<String?>(null) }
     var showEq by rememberSaveable { mutableStateOf(false) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
+    var carMode by rememberSaveable { mutableStateOf(false) }
     val settings by vm.settings.collectAsState()
     val sleepEnd by vm.sleepEnd.collectAsState()
     val context = LocalContext.current
@@ -85,6 +86,16 @@ fun AppRoot(vm: PlayerViewModel) {
     BackHandler(enabled = genreId != null) { genreId = null }
     BackHandler(enabled = showEq) { showEq = false }
     BackHandler(enabled = showSettings) { showSettings = false }
+
+    if (carMode) {
+        CarScreen(
+            catalog = catalog, favorites = favorites, ui = ui,
+            onPlay = { station, list -> vm.play(station, list) },
+            onToggle = vm::togglePlay, onPrev = vm::previous, onNext = vm::next,
+            onExit = { carMode = false },
+        )
+        return
+    }
 
     fun openOfficial(stationId: String?) {
         val url = catalog.stations.find { it.id == stationId }?.officialPlayer ?: return
@@ -127,6 +138,7 @@ fun AppRoot(vm: PlayerViewModel) {
                     currentId = ui.stationId,
                     onGenre = { genreId = it.id },
                     onSettings = { showSettings = true },
+                    onCar = { carMode = true },
                     onPlay = { station, list -> vm.play(station, list) },
                     onFavorite = vm::toggleFavorite,
                     onOfficial = ::openOfficial,
@@ -154,6 +166,7 @@ private fun HomeScreen(
     currentId: String?,
     onGenre: (Genre) -> Unit,
     onSettings: () -> Unit,
+    onCar: () -> Unit,
     onPlay: (Station, List<Station>) -> Unit,
     onFavorite: (String) -> Unit,
     onOfficial: (String) -> Unit,
@@ -171,14 +184,17 @@ private fun HomeScreen(
                     Spacer(Modifier.height(4.dp))
                     Text("Santa Monica Radio", color = TextMain, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold)
                 }
-                Text(
-                    T.SETTINGS, color = Sand, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, fontSize = 11.sp,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .border(BorderStroke(1.dp, Line), RoundedCornerShape(8.dp))
-                        .clickable(onClick = onSettings)
-                        .padding(horizontal = 10.dp, vertical = 10.dp),
-                )
+                for ((label, action) in listOf("МАШИНА" to onCar, T.SETTINGS to onSettings)) {
+                    Text(
+                        label, color = Sand, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, fontSize = 11.sp,
+                        modifier = Modifier
+                            .padding(start = 6.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .border(BorderStroke(1.dp, Line), RoundedCornerShape(8.dp))
+                            .clickable(onClick = action)
+                            .padding(horizontal = 10.dp, vertical = 10.dp),
+                    )
+                }
             }
         }
         if (favStations.isNotEmpty()) {
