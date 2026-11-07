@@ -4,6 +4,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import YAML from "yaml";
+import Ajv from "ajv";
 import { checkStream, type StreamCheck } from "./check.js";
 
 const GENRES = [
@@ -39,11 +40,12 @@ const classify = (kbps: number | undefined, hint?: string, fmt?: string) => {
   return kbps >= 96 ? "high" : kbps >= 48 ? "medium" : "low";
 };
 
+const OFFLINE = process.argv.includes("--offline"); // no network: assume all streams ok (used for the catalog bundled into apps)
 const jobs = curated.flatMap(s => (s.streams ?? []).map((st: any) => ({ s, st })));
 const results = new Map<string, StreamCheck>();
 let idx = 0;
 await Promise.all(Array.from({ length: 8 }, async () => {
-  while (idx < jobs.length) { const j = jobs[idx++]; results.set(j.st.url, await checkStream(j.s.id, j.st.url)); }
+  while (idx < jobs.length) { const j = jobs[idx++]; results.set(j.st.url, OFFLINE ? ({ stationId: j.s.id, url: j.st.url, ok: true, icy: false, bitrate: j.st.bitrate } as StreamCheck) : await checkStream(j.s.id, j.st.url)); }
 }));
 
 const order: Record<string, number> = { high: 0, medium: 1, low: 2 };
@@ -72,11 +74,18 @@ for (const s of curated) {
   });
 }
 const out = {
-  schemaVersion: 1, generatedAt: new Date().toISOString(),
+  schemaVersion: 1, generatedAt: new Date().toISOString(), bundled: OFFLINE,
   region: { id: "la", name: "Los Angeles", center: [34.05, -118.25] },
   genres: GENRES.filter(g => stations.some(s => s.genres.includes(g.id))),
   stations,
 };
+const schema = JSON.parse(readFileSync(join(dir, "..", "schema", "stations.schema.json"), "utf8"));
+const AjvCtor: any = (Ajv as any).default ?? Ajv; // ajv ships CJS; works under NodeNext
+const validate = new AjvCtor({ allErrors: true, strict: false }).compile(schema);
+if (!validate(out)) {
+  console.error("stations.json does not match schema:", JSON.stringify(validate.errors, null, 2));
+  process.exit(1);
+}
 mkdirSync(join(dir, "..", "dist"), { recursive: true });
 writeFileSync(join(dir, "..", "dist", "stations.json"), JSON.stringify(out, null, 2));
 writeFileSync(join(dir, "..", "dist", "report.md"), md);

@@ -8,9 +8,11 @@
     "discover": "tsx src/discover.ts",
     "probe": "tsx src/probe.ts",
     "build": "tsx src/build.ts",
+    "build:offline": "tsx src/build.ts --offline",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "ajv": "^8.17.0",
     "yaml": "^2.5.0"
   },
   "devDependencies": {

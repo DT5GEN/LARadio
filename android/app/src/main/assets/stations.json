@@ -1,0 +1,901 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-07T21:53:53.722Z",
+  "bundled": true,
+  "region": {
+    "id": "la",
+    "name": "Los Angeles",
+    "center": [
+      34.05,
+      -118.25
+    ]
+  },
+  "genres": [
+    {
+      "id": "hiphop",
+      "name": "Hip-Hop",
+      "nameRu": "Хип-хоп",
+      "color": "#67ff91",
+      "order": 1
+    },
+    {
+      "id": "classic-hiphop",
+      "name": "Classic Hip-Hop",
+      "nameRu": "Олдскул",
+      "color": "#ffd84d",
+      "order": 2
+    },
+    {
+      "id": "rnb",
+      "name": "R&B / Soul",
+      "nameRu": "R&B / Соул",
+      "color": "#ff7ab8",
+      "order": 3
+    },
+    {
+      "id": "top40",
+      "name": "Top 40 / Pop",
+      "nameRu": "Поп / Хиты",
+      "color": "#5ad1ff",
+      "order": 4
+    },
+    {
+      "id": "latin",
+      "name": "Latin",
+      "nameRu": "Латино",
+      "color": "#ff8a3d",
+      "order": 5
+    },
+    {
+      "id": "alternative",
+      "name": "Alternative",
+      "nameRu": "Альтернатива",
+      "color": "#b48cff",
+      "order": 6
+    },
+    {
+      "id": "rock",
+      "name": "Rock",
+      "nameRu": "Рок",
+      "color": "#ff5a5a",
+      "order": 7
+    },
+    {
+      "id": "jazz",
+      "name": "Jazz",
+      "nameRu": "Джаз",
+      "color": "#4ca9ff",
+      "order": 9
+    },
+    {
+      "id": "classical",
+      "name": "Classical",
+      "nameRu": "Классика",
+      "color": "#d9d9ff",
+      "order": 10
+    },
+    {
+      "id": "eclectic",
+      "name": "Eclectic & Public",
+      "nameRu": "Независимое",
+      "color": "#7affd0",
+      "order": 11
+    },
+    {
+      "id": "adult",
+      "name": "Adult Contemporary",
+      "nameRu": "Лёгкая музыка",
+      "color": "#ffb0c8",
+      "order": 13
+    },
+    {
+      "id": "news",
+      "name": "News & Talk",
+      "nameRu": "Новости",
+      "color": "#a8b7ad",
+      "order": 14
+    }
+  ],
+  "stations": [
+    {
+      "id": "kpwr",
+      "name": "POWER 106",
+      "callsign": "KPWR",
+      "frequency": "105.9 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "hiphop"
+      ],
+      "description": "Hip-Hop",
+      "logo": null,
+      "homepage": "https://www.power106.com/",
+      "officialPlayer": "https://player.listenlive.co/44031/",
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/KPWR_SC",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "medium",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "krrl",
+      "name": "REAL 92.3",
+      "callsign": "KRRL",
+      "frequency": "92.3 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "hiphop"
+      ],
+      "description": "Hip-Hop",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": "https://www.iheart.com/live/real-923-181/",
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://stream.revma.ihrhls.com/zc181",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "kday",
+      "name": "93.5 KDAY",
+      "callsign": "KDAY",
+      "frequency": "93.5 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "classic-hiphop"
+      ],
+      "description": "Classic Hip-Hop",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": "https://player.listenlive.co/35791",
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/KDAYFM.mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "medium",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "kiis",
+      "name": "102.7 KIIS-FM",
+      "callsign": "KIIS",
+      "frequency": "102.7 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "top40"
+      ],
+      "description": "Top 40 / Pop",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": "https://www.iheart.com/live/1027-kiis-fm-los-angeles-185/",
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://stream.revma.ihrhls.com/zc185",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://stream.revma.ihrhls.com/zc185/hls.m3u8",
+          "format": "hls",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "klli",
+      "name": "CALI 93.9",
+      "callsign": "KLLI",
+      "frequency": "93.9 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "latin"
+      ],
+      "description": "Latin",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": "https://www.cali939.com/listen-live/",
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/KLLI_FMAAC.aac",
+          "format": "aac",
+          "bitrate": null,
+          "quality": "low",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "kjlh",
+      "name": "102.3 KJLH",
+      "callsign": "KJLH",
+      "frequency": "102.3 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "rnb"
+      ],
+      "description": "R&B / Soul",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": "https://www.kjlhradio.com/listenlive/",
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://stream.abacast.net/direct/kjlh-kjlhfmaac-ibc2",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "medium",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "http://stream.abacast.net/direct/kjlh-kjlhfmaac-ibc2",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "medium",
+          "https": false,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "kroq",
+      "name": "106.7 KROQ",
+      "callsign": "KROQ",
+      "frequency": "106.7 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "alternative"
+      ],
+      "description": "Alternative",
+      "logo": null,
+      "homepage": "https://www.audacy.com/kroq",
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://live.amperwave.net/direct/audacy-kroqfmaac-imc",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "http://live.amperwave.net/direct/audacy-kroqfmaac-imc",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": false,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "kkjz",
+      "name": "KJazz 88.1",
+      "callsign": "KKJZ",
+      "frequency": "88.1 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "jazz"
+      ],
+      "description": "Jazz",
+      "logo": null,
+      "homepage": "https://kkjz.org/",
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://streaming.live365.com/a49833",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "kusc",
+      "name": "Classical KUSC",
+      "callsign": "KUSC",
+      "frequency": "91.5 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "classical"
+      ],
+      "description": "Classical",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/KUSCMP256.mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://14103.live.streamtheworld.com/KUSCAAC96_SC",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "kcrw",
+      "name": "KCRW Santa Monica",
+      "callsign": "KCRW",
+      "frequency": "89.9 FM",
+      "city": "Santa Monica",
+      "genres": [
+        "eclectic"
+      ],
+      "description": "Eclectic & Public",
+      "logo": null,
+      "homepage": "https://www.kcrw.com/",
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://streams.kcrw.com/kcrw_mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://streams.kcrw.com/kcrw_aac",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "kcrw-e24",
+      "name": "KCRW Eclectic 24",
+      "callsign": null,
+      "frequency": "WEB",
+      "city": "Santa Monica",
+      "genres": [
+        "eclectic"
+      ],
+      "description": "Eclectic & Public",
+      "logo": null,
+      "homepage": "https://www.kcrw.com/music/shows/eclectic24",
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://streams.kcrw.com/e24_mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "kxlu",
+      "name": "KXLU 88.9",
+      "callsign": "KXLU",
+      "frequency": "88.9 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "eclectic"
+      ],
+      "description": "Eclectic & Public",
+      "logo": null,
+      "homepage": "https://kxlu.com/",
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://kxlu.streamguys1.com/kxlu-hi",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "http://kxlu.streamguys1.com/kxlu-hi",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": false,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://kxlu.streamguys1.com/kxlu-lo",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "low",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "http://kxlu.streamguys1.com/kxlu-lo",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "low",
+          "https": false,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "kpcc",
+      "name": "LAist 89.3",
+      "callsign": "KPCC",
+      "frequency": "89.3 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "news"
+      ],
+      "description": "News & Talk",
+      "logo": null,
+      "homepage": "https://laist.com/",
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://laist.streamguys1.com/kpcc-mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "klos",
+      "name": "95.5 KLOS",
+      "callsign": "KLOS",
+      "frequency": "95.5 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "rock"
+      ],
+      "description": "Rock",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/KLOSFM.mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/KLOSFMAAC.aac",
+          "format": "aac",
+          "bitrate": null,
+          "quality": "medium",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "knx",
+      "name": "KNX News 97.1",
+      "callsign": "KNX",
+      "frequency": "97.1 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "news"
+      ],
+      "description": "News & Talk",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://live.amperwave.net/direct/audacy-knxfmaac-imc",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "klax",
+      "name": "97.9 La Raza",
+      "callsign": "KLAX",
+      "frequency": "97.9 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "latin"
+      ],
+      "description": "Latin",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://liveaudio.lamusica.com/LA_KLAX_icy",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "kost",
+      "name": "KOST 103.5",
+      "callsign": "KOST",
+      "frequency": "103.5 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "adult"
+      ],
+      "description": "Adult Contemporary",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": "https://www.iheart.com/live/kost-1035-193/",
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://stream.revma.ihrhls.com/zc193",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "kbig",
+      "name": "104.3 MYfm",
+      "callsign": "KBIG",
+      "frequency": "104.3 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "adult"
+      ],
+      "description": "Adult Contemporary",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": "https://www.iheart.com/live/1043-myfm-173/",
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://stream.revma.ihrhls.com/zc173",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "kysr",
+      "name": "ALT 98.7",
+      "callsign": "KYSR",
+      "frequency": "98.7 FM",
+      "city": "Los Angeles",
+      "genres": [
+        "alternative"
+      ],
+      "description": "Alternative",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": "https://www.iheart.com/live/alt-987-201/",
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://stream.revma.ihrhls.com/zc201",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "kfi",
+      "name": "KFI AM 640",
+      "callsign": "KFI",
+      "frequency": "640 AM",
+      "city": "Los Angeles",
+      "genres": [
+        "news"
+      ],
+      "description": "News & Talk",
+      "logo": null,
+      "homepage": null,
+      "officialPlayer": "https://www.iheart.com/live/kfi-am-640-177/",
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://stream.revma.ihrhls.com/zc177",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://stream.revma.ihrhls.com/zc177/hls.m3u8",
+          "format": "hls",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T21:53:53.722Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    }
+  ]
+}
