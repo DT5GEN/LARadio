@@ -10,7 +10,7 @@
 
 ## ▶ Следующий шаг (начинать отсюда)
 
-**Пользователю — три действия (по порядку):**
+**Пользователю — одно действие:**
 1. `cd E:\santa-monica-radio-pwa` → `git push -u origin main` (репозиторий `DT5GEN/LARadio`), затем на github.com: Settings → Pages → Source: **GitHub Actions**; Actions → «Build station catalog» → **Run workflow**. Каталог появится на `https://dt5gen.github.io/LARadio/stations.json`.
 2. `cd catalog` → `npm i` (добавлена зависимость `ajv`) → `npm run build` — проверить все 20 станций; ассистент читает `catalog\dist\report.md`.
 3. Открыть папку `android\` в **Android Studio**, дождаться Gradle sync, нажать Run на Pixel. **Код Android написан, но ещё НИ РАЗУ не компилировался** (у ассистента нет Android SDK). Ожидаются ошибки сборки: прислать их текст (вкладка Build) ассистенту — он исправит.
@@ -61,7 +61,7 @@
 - [ ] 1.7 `merge.ts`, `resolve.ts` (.pls/.m3u, редиректы), `classify.ts`
 - [ ] 1.8 `build.ts` → `dist/stations.json` по схеме CONCEPT §4.3 + `dist/report.md`
 - [x] 1.9 JSON Schema (`catalog/schema/stations.schema.json`) + валидация при каждой сборке в `build.ts` (отдельных тестов нет)
-- [~] 1.10 GitHub: репозиторий `DT5GEN/LARadio` (публичный), workflow `.github/workflows/catalog.yml` написан; осталось: `git push`, включить Pages (Source: GitHub Actions), запустить workflow. Ожидаемый URL каталога: `https://dt5gen.github.io/LARadio/stations.json`
+- [x] 1.10 (ГОТОВО 2026-11-08, Pages включены, workflow зелёный) GitHub: репозиторий `DT5GEN/LARadio` (публичный), workflow `.github/workflows/catalog.yml` написан; осталось: `git push`, включить Pages (Source: GitHub Actions), запустить workflow. Ожидаемый URL каталога: `https://dt5gen.github.io/LARadio/stations.json`
 - [x] 1.11 `design/tokens.json` (CONCEPT §8.2)
 
 **Готово, когда:** по публичному URL доступен `stations.json` с ≥ 15 живыми станциями LA минимум в 8 жанрах.
