@@ -14,7 +14,8 @@ import kotlin.math.tanh
 
 /**
  * 5-band equalizer on decoded 16-bit PCM (runs inside ExoPlayer's audio pipeline).
- * Automatic preamp lowers the level when bands are boosted; a soft limiter prevents clipping.
+ * Loudness is kept: only a small level trim is applied (boost -> slightly down, cut -> slightly up) and a
+ * peak limiter (instant attack, 150 ms release) catches the peaks that boosting creates, followed by a soft clipper.
  */
 @OptIn(UnstableApi::class)
 class EqAudioProcessor(private val controller: EqController) : BaseAudioProcessor() {
@@ -23,6 +24,9 @@ class EqAudioProcessor(private val controller: EqController) : BaseAudioProcesso
     private var filters: Array<Biquad> = emptyArray()
     private var appliedGains: FloatArray? = null
     private var preamp = 1.0
+    private var limiterGain = 1.0
+    private var releaseCoef = 0.0
+    private var frameBuf = DoubleArray(2)
 
     override fun onConfigure(inputAudioFormat: AudioProcessor.AudioFormat): AudioProcessor.AudioFormat {
         if (inputAudioFormat.encoding != C.ENCODING_PCM_16BIT) return AudioProcessor.AudioFormat.NOT_SET
@@ -30,6 +34,9 @@ class EqAudioProcessor(private val controller: EqController) : BaseAudioProcesso
         sampleRate = inputAudioFormat.sampleRate
         filters = Array(EQ_BANDS.size) { Biquad(channels) }
         appliedGains = null
+        limiterGain = 1.0
+        releaseCoef = 1.0 - kotlin.math.exp(-1.0 / (0.15 * sampleRate))
+        frameBuf = DoubleArray(channels)
         return inputAudioFormat
     }
 
@@ -45,11 +52,19 @@ class EqAudioProcessor(private val controller: EqController) : BaseAudioProcesso
         refreshCoefficients()
         val frames = size / (2 * channels)
         for (f in 0 until frames) {
+            var peak = 0.0
             for (ch in 0 until channels) {
                 var x = inputBuffer.getShort() / 32768.0 * preamp
                 for (filter in filters) x = filter.process(x, ch)
-                val s = (softClip(x) * 32767.0).roundToInt().coerceIn(-32768, 32767)
-                out.putShort(s.toShort())
+                frameBuf[ch] = x
+                peak = max(peak, abs(x))
+            }
+            // peak limiter: instant attack, slow release
+            val target = if (peak > LIMIT) LIMIT / peak else 1.0
+            limiterGain = if (target < limiterGain) target else limiterGain + (target - limiterGain) * releaseCoef
+            for (ch in 0 until channels) {
+                val v = (softClip(frameBuf[ch] * limiterGain) * 32767.0).roundToInt().coerceIn(-32768, 32767)
+                out.putShort(v.toShort())
             }
         }
         out.put(inputBuffer) // leftover bytes of an incomplete frame, normally none
@@ -62,7 +77,9 @@ class EqAudioProcessor(private val controller: EqController) : BaseAudioProcesso
         appliedGains = g
         for (i in filters.indices) filters[i].configure(EQ_BANDS[i], g.getOrElse(i) { 0f }.toDouble(), sampleRate)
         val maxBoost = max(0f, g.maxOrNull() ?: 0f)
-        preamp = 10.0.pow(-maxBoost * 0.8 / 20.0)
+        val maxCut = max(0f, -(g.minOrNull() ?: 0f))
+        // small trim only; the limiter handles the rest, so the overall volume does not collapse
+        preamp = 10.0.pow((-0.2 * maxBoost + 0.3 * maxCut) / 20.0)
     }
 
     private fun softClip(x: Double): Double {
@@ -72,6 +89,7 @@ class EqAudioProcessor(private val controller: EqController) : BaseAudioProcesso
 
     override fun onFlush() {
         filters.forEach { it.reset() }
+        limiterGain = 1.0
     }
 
     override fun onReset() {
@@ -80,6 +98,7 @@ class EqAudioProcessor(private val controller: EqController) : BaseAudioProcesso
     }
 
     private companion object {
-        const val KNEE = 0.89
+        const val KNEE = 0.97
+        const val LIMIT = 0.95
     }
 }

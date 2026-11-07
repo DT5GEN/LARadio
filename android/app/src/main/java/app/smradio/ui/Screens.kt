@@ -1,6 +1,7 @@
 package app.smradio.ui
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.displayCutoutPadding
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +23,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -27,6 +32,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
@@ -39,7 +45,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -82,6 +91,7 @@ fun AppRoot(vm: PlayerViewModel) {
     val settings by vm.settings.collectAsState()
     val sleepEnd by vm.sleepEnd.collectAsState()
     val context = LocalContext.current
+    val landscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     BackHandler(enabled = genreId != null) { genreId = null }
     BackHandler(enabled = showEq) { showEq = false }
@@ -93,6 +103,7 @@ fun AppRoot(vm: PlayerViewModel) {
             onPlay = { station, list -> vm.play(station, list) },
             onToggle = vm::togglePlay, onPrev = vm::previous, onNext = vm::next,
             onExit = { carMode = false },
+            landscape = landscape,
         )
         return
     }
@@ -102,23 +113,7 @@ fun AppRoot(vm: PlayerViewModel) {
         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
-    Scaffold(
-        containerColor = Bg,
-        bottomBar = {
-            MiniPlayer(
-                ui = ui,
-                onToggle = vm::togglePlay,
-                onPrev = vm::previous,
-                onNext = vm::next,
-                onOfficial = { openOfficial(ui.stationId) },
-                eqOn = eq.enabled,
-                onEq = { showEq = true },
-                bufferedSec = vm.bufferedSec,
-                sleepEnd = vm.sleepEnd,
-            )
-        },
-    ) { padding ->
-        Box(Modifier.fillMaxSize().padding(padding)) {
+    val body: @Composable () -> Unit = {
             val genre = catalog.genres.find { it.id == genreId }
             if (showSettings) {
                 SettingsScreen(
@@ -136,6 +131,7 @@ fun AppRoot(vm: PlayerViewModel) {
                     catalog = catalog,
                     favorites = favorites,
                     currentId = ui.stationId,
+                    landscape = landscape,
                     onGenre = { genreId = it.id },
                     onSettings = { showSettings = true },
                     onCar = { carMode = true },
@@ -146,6 +142,7 @@ fun AppRoot(vm: PlayerViewModel) {
             } else {
                 GenreScreen(
                     genre = genre,
+                    landscape = landscape,
                     stations = catalog.stations.filter { genre.id in it.genres },
                     favorites = favorites,
                     currentId = ui.stationId,
@@ -155,6 +152,50 @@ fun AppRoot(vm: PlayerViewModel) {
                     onOfficial = ::openOfficial,
                 )
             }
+    }
+
+    if (landscape) {
+        val d = LocalDensity.current
+        CompositionLocalProvider(LocalDensity provides Density(d.density * 0.85f, d.fontScale)) {
+            LandscapeShell(
+                ui = ui,
+                eqOn = eq.enabled,
+                canBack = showSettings || showEq || genreId != null,
+                onBack = {
+                    when {
+                        showSettings -> showSettings = false
+                        showEq -> showEq = false
+                        else -> genreId = null
+                    }
+                },
+                onToggle = vm::togglePlay,
+                onPrev = vm::previous,
+                onNext = vm::next,
+                onEq = { showEq = true },
+                onSettings = { showSettings = true },
+                onCar = { carMode = true },
+                onOfficial = { openOfficial(ui.stationId) },
+                content = body,
+            )
+        }
+    } else {
+        Scaffold(
+            containerColor = Bg,
+            bottomBar = {
+                MiniPlayer(
+                    ui = ui,
+                    onToggle = vm::togglePlay,
+                    onPrev = vm::previous,
+                    onNext = vm::next,
+                    onOfficial = { openOfficial(ui.stationId) },
+                    eqOn = eq.enabled,
+                    onEq = { showEq = true },
+                    bufferedSec = vm.bufferedSec,
+                    sleepEnd = vm.sleepEnd,
+                )
+            },
+        ) { padding ->
+            Box(Modifier.fillMaxSize().padding(padding)) { body() }
         }
     }
 }
@@ -164,6 +205,7 @@ private fun HomeScreen(
     catalog: Catalog,
     favorites: Set<String>,
     currentId: String?,
+    landscape: Boolean,
     onGenre: (Genre) -> Unit,
     onSettings: () -> Unit,
     onCar: () -> Unit,
@@ -177,7 +219,7 @@ private fun HomeScreen(
         contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        item {
+        if (!landscape) item {
             Row(Modifier.fillMaxWidth().statusBarsPadding().padding(top = 12.dp, bottom = 8.dp), verticalAlignment = Alignment.Top) {
                 Column(Modifier.weight(1f)) {
                     Text(T.TAGLINE, color = Sand, fontFamily = FontFamily.Monospace, fontSize = 12.sp, fontWeight = FontWeight.Bold)
@@ -204,7 +246,7 @@ private fun HomeScreen(
             }
         }
         item { SectionTitle(T.GENRES) }
-        items(catalog.genres.sortedBy { it.order }.chunked(2), key = { row -> row.first().id }) { row ->
+        items(catalog.genres.sortedBy { it.order }.chunked(if (landscape) 3 else 2), key = { row -> row.first().id }) { row ->
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 for (genre in row) {
                     GenreTile(
@@ -223,6 +265,7 @@ private fun HomeScreen(
 @Composable
 private fun GenreScreen(
     genre: Genre,
+    landscape: Boolean,
     stations: List<Station>,
     favorites: Set<String>,
     currentId: String?,
@@ -236,7 +279,9 @@ private fun GenreScreen(
         contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        item {
+        if (landscape) item {
+            Text(genre.nameRu, color = parseColor(genre.color), fontSize = 20.sp, fontWeight = FontWeight.ExtraBold)
+        } else item {
             Column(Modifier.statusBarsPadding().padding(top = 8.dp, bottom = 8.dp)) {
                 Text(
                     T.BACK, color = Sand, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold,
@@ -416,5 +461,85 @@ private fun PlayerButton(label: String, onClick: () -> Unit, big: Boolean = fals
         contentAlignment = Alignment.Center,
     ) {
         Text(label, color = if (big) Bg else TextMain, fontSize = if (big) 22.sp else 20.sp)
+    }
+}
+
+
+private fun statusText(ui: PlayerUi): String = when {
+    ui.failed -> T.UNAVAILABLE
+    ui.offline -> T.OFFLINE
+    ui.reconnecting -> T.RECONNECTING
+    ui.buffering -> T.CONNECTING
+    ui.track != null -> ui.track
+    ui.isPlaying -> T.LIVE
+    else -> ""
+}
+
+/**
+ * Landscape layout: list on the left (3/4), controls on the right (1/4, under the right thumb),
+ * one thin "now playing" line at the very bottom. No visualizer, status bar hidden by MainActivity.
+ */
+@Composable
+private fun LandscapeShell(
+    ui: PlayerUi,
+    eqOn: Boolean,
+    canBack: Boolean,
+    onBack: () -> Unit,
+    onToggle: () -> Unit,
+    onPrev: () -> Unit,
+    onNext: () -> Unit,
+    onEq: () -> Unit,
+    onSettings: () -> Unit,
+    onCar: () -> Unit,
+    onOfficial: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    Column(Modifier.fillMaxSize().background(Bg).displayCutoutPadding().navigationBarsPadding()) {
+        Row(Modifier.weight(1f).fillMaxWidth()) {
+            Box(Modifier.weight(3f).fillMaxHeight()) { content() }
+            Column(
+                Modifier.weight(1f).fillMaxHeight().verticalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 6.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                if (canBack) SideButton("‹ НАЗАД", onBack)
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
+                    PlayerButton("⏮", onPrev)
+                    PlayerButton(if (ui.isPlaying || ui.buffering || ui.reconnecting || ui.offline) "⏸" else "▶", onToggle, big = true)
+                    PlayerButton("⏭", onNext)
+                }
+                SideButton("EQ", onEq, active = eqOn)
+                SideButton("МАШИНА", onCar)
+                SideButton(T.SETTINGS, onSettings)
+            }
+        }
+        if (ui.stationId != null) {
+            Row(
+                Modifier.fillMaxWidth().background(Panel).padding(horizontal = 12.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(Modifier.size(8.dp).clip(CircleShape).background(if (ui.failed) ErrorRed else if (ui.isPlaying) Lit else Dim))
+                Spacer(Modifier.width(8.dp))
+                Text(ui.stationName ?: "", color = TextMain, fontWeight = FontWeight.Bold, fontSize = 14.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
+                Spacer(Modifier.width(10.dp))
+                Text(statusText(ui), color = if (ui.failed) ErrorRed else Lit, fontFamily = FontFamily.Monospace, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                if (ui.failed) {
+                    Text(T.OFFICIAL, color = Sand, fontWeight = FontWeight.Bold, fontSize = 12.sp, modifier = Modifier.clickable(onClick = onOfficial).padding(start = 8.dp))
+                } else {
+                    Text(ui.info, color = Muted, fontFamily = FontFamily.Monospace, fontSize = 11.sp, maxLines = 1)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SideButton(label: String, onClick: () -> Unit, active: Boolean = false) {
+    val shape = RoundedCornerShape(10.dp)
+    Box(
+        Modifier.fillMaxWidth().clip(shape).background(Panel2).border(BorderStroke(1.dp, if (active) Lit.copy(alpha = 0.7f) else Line), shape)
+            .clickable(onClick = onClick).padding(vertical = 12.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(label, color = if (active) Lit else Sand, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, fontSize = 13.sp, maxLines = 1)
     }
 }

@@ -2,6 +2,7 @@ package app.smradio
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,6 +11,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import app.smradio.playback.dsp.SpectrumBus
 import app.smradio.ui.AppRoot
 import app.smradio.ui.PlayerViewModel
@@ -28,6 +32,23 @@ class MainActivity : ComponentActivity() {
         setContent {
             RetroTheme { AppRoot(viewModel) }
         }
+        applySystemBars()
+    }
+
+    /** Landscape = car / dock use: hide the status bar (swipe from the top edge shows it briefly). */
+    private fun applySystemBars() {
+        val controller = WindowCompat.getInsetsController(window, window.decorView)
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller.hide(WindowInsetsCompat.Type.statusBars())
+        } else {
+            controller.show(WindowInsetsCompat.Type.statusBars())
+        }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) applySystemBars()
     }
 
     override fun onStart() {
