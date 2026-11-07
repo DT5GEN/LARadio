@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "check": "tsx src/check.ts",
+    "discover": "tsx src/discover.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
