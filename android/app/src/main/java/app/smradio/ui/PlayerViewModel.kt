@@ -43,6 +43,7 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
 
     val catalog = container.catalogRepo.catalog
     val favorites = container.prefs.favorites
+    val region = container.prefs.region
     val eq: StateFlow<EqState> = container.eq.state
     val settings: StateFlow<Settings> = container.settings.state
     val sleepEnd: StateFlow<Long?> = container.sleep.endAtMs
@@ -161,6 +162,10 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
     /** minutes = 0 turns the sleep timer off. */
     fun setSleepTimer(minutes: Int) {
         if (minutes <= 0) container.sleep.cancel() else container.sleep.start(minutes)
+    }
+
+    fun setRegion(id: String) {
+        viewModelScope.launch { container.prefs.saveRegion(id) }
     }
 
     fun toggleFavorite(stationId: String) {

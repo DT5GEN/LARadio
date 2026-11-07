@@ -1,0 +1,43 @@
+# Curated Swedish stations (region "se"). Sveriges Radio publishes open streams (http-live.sr.se).
+# "guess" entries are unverified patterns; build.ts drops dead ones.
+
+- id: se-sr-p1
+  name: Sveriges Radio P1
+  frequency: WEB
+  genres: [news]
+  homepage: https://sverigesradio.se/p1
+  streams:
+    - { url: "https://http-live.sr.se/p1-mp3-192", quality: high }
+    - { url: "https://http-live.sr.se/p1-aac-192", quality: high }
+
+- id: se-sr-p2
+  name: Sveriges Radio P2
+  frequency: WEB
+  genres: [classical]
+  homepage: https://sverigesradio.se/p2
+  streams:
+    - { url: "https://http-live.sr.se/p2-mp3-192", quality: high }
+
+- id: se-sr-p3
+  name: Sveriges Radio P3
+  frequency: WEB
+  genres: [top40]
+  homepage: https://sverigesradio.se/p3
+  streams:
+    - { url: "https://http-live.sr.se/p3-mp3-192", quality: high }
+
+- id: se-sr-p4-stockholm
+  name: P4 Stockholm
+  frequency: WEB
+  genres: [adult]
+  homepage: https://sverigesradio.se/stockholm
+  streams:
+    - { url: "https://http-live.sr.se/p4stockholm-mp3-192", quality: high }
+
+- id: se-rix-fm
+  name: Rix FM
+  frequency: WEB
+  genres: [top40]
+  homepage: https://www.rixfm.se/
+  streams:   # guess
+    - { url: "https://fm01-ice.stream.khz.se/fm01_mp3", quality: high }

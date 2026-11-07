@@ -17,8 +17,17 @@ import java.io.File
 data class Catalog(
     val schemaVersion: Int = 1,
     val generatedAt: String = "",
+    val regions: List<Region> = emptyList(),
     val genres: List<Genre> = emptyList(),
     val stations: List<Station> = emptyList(),
+)
+
+@Serializable
+data class Region(
+    val id: String,
+    val name: String = "",
+    val nameRu: String = "",
+    val flag: String = "",
 )
 
 @Serializable
@@ -34,6 +43,7 @@ data class Genre(
 data class Station(
     val id: String,
     val name: String,
+    val region: String = "la",
     val callsign: String? = null,
     val frequency: String = "WEB",
     val city: String? = null,

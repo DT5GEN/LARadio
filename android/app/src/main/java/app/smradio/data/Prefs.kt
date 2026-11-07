@@ -34,6 +34,12 @@ class Prefs(private val context: Context) {
         }
     }
 
+    private val regionKey = stringPreferencesKey("region")
+    val region: Flow<String> = context.settingsStore.data.map { it[regionKey] ?: "la" }
+    suspend fun saveRegion(id: String) {
+        context.settingsStore.edit { it[regionKey] = id }
+    }
+
     private val qualityKey = stringPreferencesKey("quality")
     private val bufferKey = stringPreferencesKey("buffer")
 

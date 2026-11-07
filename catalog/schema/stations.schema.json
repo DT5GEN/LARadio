@@ -17,6 +17,18 @@
         "center": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 }
       }
     },
+    "regions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "nameRu", "flag"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "name": { "type": "string" }, "nameRu": { "type": "string" }, "flag": { "type": "string" },
+          "center": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 }
+        }
+      }
+    },
     "genres": {
       "type": "array",
       "items": {
@@ -39,6 +51,7 @@
           "name": { "type": "string", "minLength": 1 },
           "callsign": { "type": ["string", "null"] },
           "frequency": { "type": "string" },
+          "region": { "type": "string", "pattern": "^[a-z0-9-]+$" },
           "city": { "type": "string" },
           "genres": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
           "description": { "type": "string" },

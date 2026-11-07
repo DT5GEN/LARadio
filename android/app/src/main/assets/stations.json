@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-07T21:53:53.722Z",
+  "generatedAt": "2026-11-07T23:42:50.856Z",
   "bundled": true,
   "region": {
     "id": "la",
@@ -10,6 +10,38 @@
       -118.25
     ]
   },
+  "regions": [
+    {
+      "id": "la",
+      "name": "Los Angeles",
+      "nameRu": "Америка",
+      "flag": "🇺🇸",
+      "center": [
+        34.05,
+        -118.25
+      ]
+    },
+    {
+      "id": "es",
+      "name": "España",
+      "nameRu": "Испания",
+      "flag": "🇪🇸",
+      "center": [
+        40.42,
+        -3.7
+      ]
+    },
+    {
+      "id": "se",
+      "name": "Sverige",
+      "nameRu": "Швеция",
+      "flag": "🇸🇪",
+      "center": [
+        59.33,
+        18.07
+      ]
+    }
+  ],
   "genres": [
     {
       "id": "hiphop",
@@ -86,14 +118,14 @@
       "name": "Adult Contemporary",
       "nameRu": "Лёгкая музыка",
       "color": "#ffb0c8",
-      "order": 13
+      "order": 14
     },
     {
       "id": "news",
       "name": "News & Talk",
       "nameRu": "Новости",
       "color": "#a8b7ad",
-      "order": 14
+      "order": 15
     }
   ],
   "stations": [
@@ -102,6 +134,7 @@
       "name": "POWER 106",
       "callsign": "KPWR",
       "frequency": "105.9 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "hiphop"
@@ -122,7 +155,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -135,6 +168,7 @@
       "name": "REAL 92.3",
       "callsign": "KRRL",
       "frequency": "92.3 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "hiphop"
@@ -155,7 +189,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -168,6 +202,7 @@
       "name": "93.5 KDAY",
       "callsign": "KDAY",
       "frequency": "93.5 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "classic-hiphop"
@@ -188,7 +223,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -201,6 +236,7 @@
       "name": "102.7 KIIS-FM",
       "callsign": "KIIS",
       "frequency": "102.7 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "top40"
@@ -221,7 +257,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -235,7 +271,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -248,6 +284,7 @@
       "name": "CALI 93.9",
       "callsign": "KLLI",
       "frequency": "93.9 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "latin"
@@ -268,7 +305,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -281,6 +318,7 @@
       "name": "102.3 KJLH",
       "callsign": "KJLH",
       "frequency": "102.3 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "rnb"
@@ -301,7 +339,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -315,7 +353,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -328,6 +366,7 @@
       "name": "106.7 KROQ",
       "callsign": "KROQ",
       "frequency": "106.7 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "alternative"
@@ -348,7 +387,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -362,7 +401,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -375,6 +414,7 @@
       "name": "KJazz 88.1",
       "callsign": "KKJZ",
       "frequency": "88.1 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "jazz"
@@ -395,7 +435,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -408,6 +448,7 @@
       "name": "Classical KUSC",
       "callsign": "KUSC",
       "frequency": "91.5 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "classical"
@@ -428,7 +469,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -442,7 +483,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -455,6 +496,7 @@
       "name": "KCRW Santa Monica",
       "callsign": "KCRW",
       "frequency": "89.9 FM",
+      "region": "la",
       "city": "Santa Monica",
       "genres": [
         "eclectic"
@@ -475,7 +517,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -489,7 +531,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -502,6 +544,7 @@
       "name": "KCRW Eclectic 24",
       "callsign": null,
       "frequency": "WEB",
+      "region": "la",
       "city": "Santa Monica",
       "genres": [
         "eclectic"
@@ -522,7 +565,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -535,6 +578,7 @@
       "name": "KXLU 88.9",
       "callsign": "KXLU",
       "frequency": "88.9 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "eclectic"
@@ -555,7 +599,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -569,7 +613,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -583,7 +627,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -597,7 +641,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -610,6 +654,7 @@
       "name": "LAist 89.3",
       "callsign": "KPCC",
       "frequency": "89.3 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "news"
@@ -630,7 +675,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -643,6 +688,7 @@
       "name": "95.5 KLOS",
       "callsign": "KLOS",
       "frequency": "95.5 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "rock"
@@ -663,7 +709,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -677,7 +723,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -690,6 +736,7 @@
       "name": "KNX News 97.1",
       "callsign": "KNX",
       "frequency": "97.1 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "news"
@@ -710,7 +757,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -723,6 +770,7 @@
       "name": "97.9 La Raza",
       "callsign": "KLAX",
       "frequency": "97.9 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "latin"
@@ -743,7 +791,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -756,6 +804,7 @@
       "name": "KOST 103.5",
       "callsign": "KOST",
       "frequency": "103.5 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "adult"
@@ -776,7 +825,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -789,6 +838,7 @@
       "name": "104.3 MYfm",
       "callsign": "KBIG",
       "frequency": "104.3 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "adult"
@@ -809,7 +859,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -822,6 +872,7 @@
       "name": "ALT 98.7",
       "callsign": "KYSR",
       "frequency": "98.7 FM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "alternative"
@@ -842,7 +893,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -855,6 +906,7 @@
       "name": "KFI AM 640",
       "callsign": "KFI",
       "frequency": "640 AM",
+      "region": "la",
       "city": "Los Angeles",
       "genres": [
         "news"
@@ -875,7 +927,7 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }
@@ -889,7 +941,341 @@
           "icy": false,
           "check": {
             "ok": true,
-            "at": "2026-11-07T21:53:53.722Z",
+            "at": "2026-11-07T23:42:50.856Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "es-cadena-ser",
+      "name": "Cadena SER",
+      "callsign": "SER",
+      "frequency": "WEB",
+      "region": "es",
+      "city": "España",
+      "genres": [
+        "news"
+      ],
+      "description": "News & Talk",
+      "logo": null,
+      "homepage": "https://cadenaser.com/",
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/CADENASER.mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:42:50.856Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "es-los40",
+      "name": "LOS40",
+      "callsign": null,
+      "frequency": "WEB",
+      "region": "es",
+      "city": "España",
+      "genres": [
+        "top40"
+      ],
+      "description": "Top 40 / Pop",
+      "logo": null,
+      "homepage": "https://los40.com/",
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/LOS40.mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:42:50.856Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/LOS40AAC.aac",
+          "format": "aac",
+          "bitrate": null,
+          "quality": "medium",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:42:50.856Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "es-cadena-dial",
+      "name": "Cadena Dial",
+      "callsign": null,
+      "frequency": "WEB",
+      "region": "es",
+      "city": "España",
+      "genres": [
+        "latin"
+      ],
+      "description": "Latin",
+      "logo": null,
+      "homepage": "https://play.cadenadial.com/",
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/CADENADIAL.mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:42:50.856Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "es-cadena-100",
+      "name": "Cadena 100",
+      "callsign": null,
+      "frequency": "WEB",
+      "region": "es",
+      "city": "España",
+      "genres": [
+        "adult"
+      ],
+      "description": "Adult Contemporary",
+      "logo": null,
+      "homepage": "https://www.cadena100.es/",
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/CADENA100.mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:42:50.856Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "se-sr-p1",
+      "name": "Sveriges Radio P1",
+      "callsign": null,
+      "frequency": "WEB",
+      "region": "se",
+      "city": "Sverige",
+      "genres": [
+        "news"
+      ],
+      "description": "News & Talk",
+      "logo": null,
+      "homepage": "https://sverigesradio.se/p1",
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://http-live.sr.se/p1-mp3-192",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:42:50.856Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        },
+        {
+          "url": "https://http-live.sr.se/p1-aac-192",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:42:50.856Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "se-sr-p2",
+      "name": "Sveriges Radio P2",
+      "callsign": null,
+      "frequency": "WEB",
+      "region": "se",
+      "city": "Sverige",
+      "genres": [
+        "classical"
+      ],
+      "description": "Classical",
+      "logo": null,
+      "homepage": "https://sverigesradio.se/p2",
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://http-live.sr.se/p2-mp3-192",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:42:50.856Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "se-sr-p3",
+      "name": "Sveriges Radio P3",
+      "callsign": null,
+      "frequency": "WEB",
+      "region": "se",
+      "city": "Sverige",
+      "genres": [
+        "top40"
+      ],
+      "description": "Top 40 / Pop",
+      "logo": null,
+      "homepage": "https://sverigesradio.se/p3",
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://http-live.sr.se/p3-mp3-192",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:42:50.856Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "se-sr-p4-stockholm",
+      "name": "P4 Stockholm",
+      "callsign": null,
+      "frequency": "WEB",
+      "region": "se",
+      "city": "Sverige",
+      "genres": [
+        "adult"
+      ],
+      "description": "Adult Contemporary",
+      "logo": null,
+      "homepage": "https://sverigesradio.se/stockholm",
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://http-live.sr.se/p4stockholm-mp3-192",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:42:50.856Z",
+            "latencyMs": null,
+            "contentType": null
+          }
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "id": "se-rix-fm",
+      "name": "Rix FM",
+      "callsign": null,
+      "frequency": "WEB",
+      "region": "se",
+      "city": "Sverige",
+      "genres": [
+        "top40"
+      ],
+      "description": "Top 40 / Pop",
+      "logo": null,
+      "homepage": "https://www.rixfm.se/",
+      "officialPlayer": null,
+      "source": "curated",
+      "radioBrowserUuid": null,
+      "streams": [
+        {
+          "url": "https://fm01-ice.stream.khz.se/fm01_mp3",
+          "format": "mp3",
+          "bitrate": null,
+          "quality": "high",
+          "https": true,
+          "icy": false,
+          "check": {
+            "ok": true,
+            "at": "2026-11-07T23:42:50.856Z",
             "latencyMs": null,
             "contentType": null
           }

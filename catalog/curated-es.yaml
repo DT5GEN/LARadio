@@ -1,0 +1,37 @@
+# Curated Spanish stations (region "es").
+# Streams marked "guess" are unverified patterns: build.ts checks every stream and silently drops dead ones,
+# so a wrong guess is harmless. Real discoveries: run `npm run discover` / `npm run probe` on your PC.
+
+- id: es-cadena-ser
+  name: Cadena SER
+  callsign: SER
+  frequency: WEB
+  genres: [news]
+  homepage: https://cadenaser.com/
+  streams:   # guess (StreamTheWorld mount)
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/CADENASER.mp3", quality: high }
+
+- id: es-los40
+  name: LOS40
+  frequency: WEB
+  genres: [top40]
+  homepage: https://los40.com/
+  streams:   # guess
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/LOS40.mp3", quality: high }
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/LOS40AAC.aac", quality: medium }
+
+- id: es-cadena-dial
+  name: Cadena Dial
+  frequency: WEB
+  genres: [latin]
+  homepage: https://play.cadenadial.com/
+  streams:   # guess
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/CADENADIAL.mp3", quality: high }
+
+- id: es-cadena-100
+  name: Cadena 100
+  frequency: WEB
+  genres: [adult]
+  homepage: https://www.cadena100.es/
+  streams:   # guess
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/CADENA100.mp3", quality: high }

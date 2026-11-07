@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.smradio.data.Catalog
 import app.smradio.data.Genre
+import app.smradio.data.Region
 import app.smradio.data.Station
 
 /**
@@ -53,6 +54,9 @@ fun CarScreen(
     catalog: Catalog,
     favorites: Set<String>,
     ui: PlayerUi,
+    regions: List<Region>,
+    regionId: String,
+    onRegion: (String) -> Unit,
     onPlay: (Station, List<Station>) -> Unit,
     onToggle: () -> Unit,
     onPrev: () -> Unit,
@@ -84,7 +88,7 @@ fun CarScreen(
     if (landscape) {
         Column(Modifier.fillMaxSize().background(Color.Black).displayCutoutPadding().navigationBarsPadding()) {
             Row(Modifier.weight(1f).fillMaxWidth()) {
-                CarList(Modifier.weight(2f).fillMaxHeight(), catalog, favorites, ui, genre, compact = true, onPlay = onPlay, onGenre = { genreId = it })
+                CarList(Modifier.weight(2f).fillMaxHeight(), catalog, favorites, ui, genre, compact = true, regions = regions, regionId = regionId, onRegion = onRegion, onPlay = onPlay, onGenre = { genreId = it })
                 Column(
                     Modifier.weight(1f).fillMaxHeight().padding(horizontal = 8.dp, vertical = 4.dp),
                     verticalArrangement = Arrangement.SpaceBetween,
@@ -114,7 +118,7 @@ fun CarScreen(
             CarTextButton("‹ ВЫХОД", onExit)
             if (genre != null) CarTextButton("‹ ЖАНРЫ") { genreId = null }
         }
-        CarList(Modifier.weight(1f).fillMaxWidth(), catalog, favorites, ui, genre, compact = false, onPlay = onPlay, onGenre = { genreId = it })
+        CarList(Modifier.weight(1f).fillMaxWidth(), catalog, favorites, ui, genre, compact = false, regions = regions, regionId = regionId, onRegion = onRegion, onPlay = onPlay, onGenre = { genreId = it })
         Column(Modifier.fillMaxWidth().background(Panel).padding(horizontal = 16.dp, vertical = 10.dp)) {
             if (ui.stationId != null) {
                 Text(ui.stationName ?: "", color = TextMain, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -139,6 +143,9 @@ private fun CarList(
     ui: PlayerUi,
     genre: Genre?,
     compact: Boolean,
+    regions: List<Region>,
+    regionId: String,
+    onRegion: (String) -> Unit,
     onPlay: (Station, List<Station>) -> Unit,
     onGenre: (String) -> Unit,
 ) {
@@ -149,6 +156,7 @@ private fun CarList(
         verticalArrangement = Arrangement.spacedBy(if (compact) 6.dp else 8.dp),
     ) {
         if (genre == null) {
+            if (regions.size > 1) item { RegionTabs(regions, regionId, onRegion) }
             if (favStations.isNotEmpty()) {
                 item { CarSection("ИЗБРАННОЕ") }
                 items(favStations, key = { "f-" + it.id }) { st ->

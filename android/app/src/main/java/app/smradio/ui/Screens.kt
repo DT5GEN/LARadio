@@ -57,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.smradio.data.Catalog
 import app.smradio.data.Genre
+import app.smradio.data.Region
 import app.smradio.data.Station
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
@@ -83,6 +84,7 @@ private object T {
 fun AppRoot(vm: PlayerViewModel) {
     val catalog by vm.catalog.collectAsState()
     val favorites by vm.favorites.collectAsState(initial = emptySet())
+    val savedRegion by vm.region.collectAsState(initial = "la")
     val ui by vm.ui.collectAsState()
     val eq by vm.eq.collectAsState()
     var genreId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -94,13 +96,24 @@ fun AppRoot(vm: PlayerViewModel) {
     val context = LocalContext.current
     val landscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
+    // one tab per region (America / Spain / Sweden); everything below works on the selected region only
+    val regions = catalog.regions
+    val regionId = regions.find { it.id == savedRegion }?.id ?: regions.firstOrNull()?.id ?: "la"
+    val regionStations = catalog.stations.filter { it.region == regionId }
+    val regionCatalog = catalog.copy(
+        stations = regionStations,
+        genres = catalog.genres.filter { g -> regionStations.any { g.id in it.genres } },
+    )
+    val onRegion: (String) -> Unit = { id -> if (id != regionId) { genreId = null; vm.setRegion(id) } }
+
     BackHandler(enabled = genreId != null) { genreId = null }
     BackHandler(enabled = showEq) { showEq = false }
     BackHandler(enabled = showSettings) { showSettings = false }
 
     if (carMode) {
         CarScreen(
-            catalog = catalog, favorites = favorites, ui = ui,
+            catalog = regionCatalog, favorites = favorites, ui = ui,
+            regions = regions, regionId = regionId, onRegion = onRegion,
             onPlay = { station, list -> vm.play(station, list) },
             onToggle = vm::togglePlay, onPrev = vm::previous, onNext = vm::next,
             onExit = { carMode = false },
@@ -115,7 +128,7 @@ fun AppRoot(vm: PlayerViewModel) {
     }
 
     val body: @Composable () -> Unit = {
-            val genre = catalog.genres.find { it.id == genreId }
+            val genre = regionCatalog.genres.find { it.id == genreId }
             if (showSettings) {
                 SettingsScreen(
                     settings = settings,
@@ -129,7 +142,10 @@ fun AppRoot(vm: PlayerViewModel) {
                 EqScreen(state = eq, onChange = vm::setEq, onBack = { showEq = false })
             } else if (genre == null) {
                 HomeScreen(
-                    catalog = catalog,
+                    catalog = regionCatalog,
+                    regions = regions,
+                    regionId = regionId,
+                    onRegion = onRegion,
                     favorites = favorites,
                     currentId = ui.stationId,
                     landscape = landscape,
@@ -144,7 +160,7 @@ fun AppRoot(vm: PlayerViewModel) {
                 GenreScreen(
                     genre = genre,
                     landscape = landscape,
-                    stations = catalog.stations.filter { genre.id in it.genres },
+                    stations = regionStations.filter { genre.id in it.genres },
                     favorites = favorites,
                     currentId = ui.stationId,
                     onBack = { genreId = null },
@@ -204,6 +220,9 @@ fun AppRoot(vm: PlayerViewModel) {
 @Composable
 private fun HomeScreen(
     catalog: Catalog,
+    regions: List<Region>,
+    regionId: String,
+    onRegion: (String) -> Unit,
     favorites: Set<String>,
     currentId: String?,
     landscape: Boolean,
@@ -240,6 +259,7 @@ private fun HomeScreen(
                 }
             }
         }
+        if (regions.size > 1) item { RegionTabs(regions, regionId, onRegion) }
         if (favStations.isNotEmpty()) {
             item { SectionTitle(T.FAVORITES) }
             items(favStations, key = { "fav-" + it.id }) { station ->
@@ -294,6 +314,28 @@ private fun GenreScreen(
         }
         items(stations, key = { it.id }) { station ->
             StationRow(station, station.id == currentId, station.id in favorites, { onPlay(station, stations) }, { onFavorite(station.id) }, { onOfficial(station.id) })
+        }
+    }
+}
+
+@Composable
+fun RegionTabs(regions: List<Region>, selectedId: String, onSelect: (String) -> Unit, modifier: Modifier = Modifier) {
+    Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        for (r in regions) {
+            val on = r.id == selectedId
+            val shape = RoundedCornerShape(10.dp)
+            Box(
+                Modifier
+                    .weight(1f)
+                    .clip(shape)
+                    .background(if (on) Lit else Panel2)
+                    .border(BorderStroke(1.dp, if (on) Lit else Line), shape)
+                    .clickable { onSelect(r.id) }
+                    .padding(vertical = 11.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text("${r.flag} ${r.nameRu}", color = if (on) Bg else TextMain, fontWeight = FontWeight.Bold, fontSize = 13.sp, maxLines = 1)
+            }
         }
     }
 }
