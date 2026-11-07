@@ -12,7 +12,11 @@ import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import app.smradio.App
+import app.smradio.data.BufferProfile
+import app.smradio.data.QualitySetting
+import app.smradio.data.Settings
 import app.smradio.data.Station
+import app.smradio.playback.LiveStats
 import app.smradio.playback.PlaybackService
 import app.smradio.playback.dsp.EqState
 import com.google.common.util.concurrent.ListenableFuture
@@ -28,6 +32,10 @@ data class PlayerUi(
     val isPlaying: Boolean = false,
     val buffering: Boolean = false,
     val failed: Boolean = false,
+    val reconnecting: Boolean = false,
+    val offline: Boolean = false,
+    /** e.g. "128K · AAC · ВЫС" */
+    val info: String = "",
 )
 
 class PlayerViewModel(app: Application) : AndroidViewModel(app) {
@@ -36,6 +44,9 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
     val catalog = container.catalogRepo.catalog
     val favorites = container.prefs.favorites
     val eq: StateFlow<EqState> = container.eq.state
+    val settings: StateFlow<Settings> = container.settings.state
+    val sleepEnd: StateFlow<Long?> = container.sleep.endAtMs
+    val bufferedSec: StateFlow<Int> = LiveStats.bufferedSec
 
     private val _ui = MutableStateFlow(PlayerUi())
     val ui: StateFlow<PlayerUi> = _ui.asStateFlow()
@@ -43,6 +54,10 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
     private var controller: MediaController? = null
     private var controllerFuture: ListenableFuture<MediaController>? = null
     private var errorStationId: String? = null
+    private var status = PlaybackService.STATUS_OK
+    private var kbps = 0
+    private var format = ""
+    private var qualityTag = ""
 
     private val playerListener = object : Player.Listener {
         override fun onEvents(player: Player, events: Player.Events) = sync()
@@ -50,7 +65,11 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
 
     private val sessionListener = object : MediaController.Listener {
         override fun onExtrasChanged(controller: MediaController, extras: Bundle) {
-            errorStationId = extras.getString("errorStation")
+            errorStationId = extras.getString(PlaybackService.EXTRA_ERROR_STATION)
+            status = extras.getString(PlaybackService.EXTRA_STATUS) ?: PlaybackService.STATUS_OK
+            kbps = extras.getInt(PlaybackService.EXTRA_KBPS, 0)
+            format = extras.getString(PlaybackService.EXTRA_FORMAT) ?: ""
+            qualityTag = extras.getString(PlaybackService.EXTRA_QUALITY) ?: ""
             sync()
         }
     }
@@ -79,7 +98,24 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
             isPlaying = c.isPlaying,
             buffering = c.playWhenReady && c.playbackState == Player.STATE_BUFFERING,
             failed = id != null && id == errorStationId,
+            reconnecting = c.playWhenReady && status == PlaybackService.STATUS_RECONNECTING,
+            offline = c.playWhenReady && status == PlaybackService.STATUS_OFFLINE,
+            info = streamInfo(),
         )
+    }
+
+    private fun streamInfo(): String {
+        val quality = when (qualityTag) {
+            "high" -> "ВЫС"
+            "medium" -> "СРЕД"
+            "low" -> "ЭКОН"
+            else -> ""
+        }
+        return listOfNotNull(
+            kbps.takeIf { it > 0 }?.let { "${it}K" },
+            format.takeIf { it.isNotEmpty() }?.uppercase(),
+            quality.takeIf { it.isNotEmpty() },
+        ).joinToString(" · ")
     }
 
     /** Play [station] inside [playlist] so that prev/next buttons switch stations within the list. */
@@ -96,7 +132,11 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
 
     fun togglePlay() {
         val c = controller ?: return
-        if (c.playbackState == Player.STATE_IDLE && c.currentMediaItem != null) {
+        val u = _ui.value
+        if (u.reconnecting || u.offline) {
+            c.pause() // cancel the automatic reconnection
+        } else if (c.playbackState == Player.STATE_IDLE && c.currentMediaItem != null) {
+            errorStationId = null
             c.prepare(); c.play()
         } else if (c.playWhenReady) c.pause() else c.play()
     }
@@ -107,6 +147,20 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
     fun setEq(enabled: Boolean, gains: List<Float>) {
         container.eq.update(enabled, gains)
         viewModelScope.launch { container.prefs.saveEq(container.eq.state.value) }
+    }
+
+    fun setQuality(quality: QualitySetting) = updateSettings { it.copy(quality = quality) }
+
+    fun setBuffer(buffer: BufferProfile) = updateSettings { it.copy(buffer = buffer) }
+
+    private fun updateSettings(block: (Settings) -> Settings) {
+        container.settings.update(block)
+        viewModelScope.launch { container.prefs.saveSettings(container.settings.state.value) }
+    }
+
+    /** minutes = 0 turns the sleep timer off. */
+    fun setSleepTimer(minutes: Int) {
+        if (minutes <= 0) container.sleep.cancel() else container.sleep.start(minutes)
     }
 
     fun toggleFavorite(stationId: String) {

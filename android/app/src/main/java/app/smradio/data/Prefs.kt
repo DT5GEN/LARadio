@@ -34,6 +34,23 @@ class Prefs(private val context: Context) {
         }
     }
 
+    private val qualityKey = stringPreferencesKey("quality")
+    private val bufferKey = stringPreferencesKey("buffer")
+
+    val settings: Flow<Settings> = context.settingsStore.data.map { prefs ->
+        Settings(
+            quality = runCatching { QualitySetting.valueOf(prefs[qualityKey] ?: "") }.getOrDefault(QualitySetting.AUTO),
+            buffer = runCatching { BufferProfile.valueOf(prefs[bufferKey] ?: "") }.getOrDefault(BufferProfile.NORMAL),
+        )
+    }
+
+    suspend fun saveSettings(settings: Settings) {
+        context.settingsStore.edit { prefs ->
+            prefs[qualityKey] = settings.quality.name
+            prefs[bufferKey] = settings.buffer.name
+        }
+    }
+
     suspend fun toggleFavorite(stationId: String) {
         context.settingsStore.edit { prefs ->
             val current = prefs[favoritesKey] ?: emptySet()
