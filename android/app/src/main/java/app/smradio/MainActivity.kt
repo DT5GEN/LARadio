@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import app.smradio.playback.dsp.SpectrumBus
 import app.smradio.ui.AppRoot
 import app.smradio.ui.PlayerViewModel
 import app.smradio.ui.RetroTheme
@@ -27,6 +28,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             RetroTheme { AppRoot(viewModel) }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        SpectrumBus.appForeground = true
+    }
+
+    override fun onStop() {
+        SpectrumBus.appForeground = false
+        super.onStop()
     }
 
     private fun requestNotificationPermissionIfNeeded() {

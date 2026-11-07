@@ -1,5 +1,6 @@
 package app.smradio.playback
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -9,10 +10,14 @@ import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
+import androidx.media3.common.audio.AudioProcessor
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.okhttp.OkHttpDataSource
+import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.audio.AudioSink
+import androidx.media3.exoplayer.audio.DefaultAudioSink
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService
@@ -21,6 +26,8 @@ import androidx.media3.session.MediaLibraryService.MediaLibrarySession
 import androidx.media3.session.MediaSession
 import app.smradio.App
 import app.smradio.AppContainer
+import app.smradio.playback.dsp.EqAudioProcessor
+import app.smradio.playback.dsp.FftTapProcessor
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
@@ -77,7 +84,19 @@ class PlaybackService : MediaLibraryService() {
         super.onCreate()
         val container = (application as App).container
         val dataSourceFactory = OkHttpDataSource.Factory(container.http).setUserAgent(AppContainer.USER_AGENT)
-        player = ExoPlayer.Builder(this)
+        // Audio goes through: equalizer -> spectrum tap -> speaker
+        val renderersFactory = object : DefaultRenderersFactory(this) {
+            override fun buildAudioSink(
+                context: Context,
+                enableFloatOutput: Boolean,
+                enableAudioTrackPlaybackParams: Boolean,
+            ): AudioSink? = DefaultAudioSink.Builder(context)
+                .setEnableFloatOutput(false)
+                .setEnableAudioTrackPlaybackParams(enableAudioTrackPlaybackParams)
+                .setAudioProcessors(arrayOf<AudioProcessor>(EqAudioProcessor(container.eq), FftTapProcessor()))
+                .build()
+        }
+        player = ExoPlayer.Builder(this, renderersFactory)
             .setMediaSourceFactory(DefaultMediaSourceFactory(this).setDataSourceFactory(dataSourceFactory))
             .setAudioAttributes(
                 AudioAttributes.Builder()

@@ -66,10 +66,13 @@ fun AppRoot(vm: PlayerViewModel) {
     val catalog by vm.catalog.collectAsState()
     val favorites by vm.favorites.collectAsState(initial = emptySet())
     val ui by vm.ui.collectAsState()
+    val eq by vm.eq.collectAsState()
     var genreId by rememberSaveable { mutableStateOf<String?>(null) }
+    var showEq by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
 
     BackHandler(enabled = genreId != null) { genreId = null }
+    BackHandler(enabled = showEq) { showEq = false }
 
     fun openOfficial(stationId: String?) {
         val url = catalog.stations.find { it.id == stationId }?.officialPlayer ?: return
@@ -85,12 +88,16 @@ fun AppRoot(vm: PlayerViewModel) {
                 onPrev = vm::previous,
                 onNext = vm::next,
                 onOfficial = { openOfficial(ui.stationId) },
+                eqOn = eq.enabled,
+                onEq = { showEq = true },
             )
         },
     ) { padding ->
         Box(Modifier.fillMaxSize().padding(padding)) {
             val genre = catalog.genres.find { it.id == genreId }
-            if (genre == null) {
+            if (showEq) {
+                EqScreen(state = eq, onChange = vm::setEq, onBack = { showEq = false })
+            } else if (genre == null) {
                 HomeScreen(
                     catalog = catalog,
                     favorites = favorites,
@@ -266,6 +273,8 @@ private fun MiniPlayer(
     onPrev: () -> Unit,
     onNext: () -> Unit,
     onOfficial: () -> Unit,
+    eqOn: Boolean,
+    onEq: () -> Unit,
 ) {
     Column(
         Modifier
@@ -279,6 +288,10 @@ private fun MiniPlayer(
             Text(T.PICK_STATION, color = Muted, fontFamily = FontFamily.Monospace, fontSize = 13.sp, modifier = Modifier.padding(vertical = 12.dp))
             return@Column
         }
+        SegmentBars(
+            active = ui.isPlaying,
+            modifier = Modifier.fillMaxWidth().height(56.dp).padding(bottom = 8.dp),
+        )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(10.dp).clip(CircleShape).background(if (ui.failed) ErrorRed else if (ui.isPlaying) Lit else Dim))
             Spacer(Modifier.width(10.dp))
@@ -293,6 +306,10 @@ private fun MiniPlayer(
                 }
                 Text(sub, color = if (ui.failed) ErrorRed else Lit, fontFamily = FontFamily.Monospace, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
+            Text(
+                "EQ", color = if (eqOn) Lit else Muted, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, fontSize = 14.sp,
+                modifier = Modifier.clip(RoundedCornerShape(8.dp)).clickable(onClick = onEq).padding(horizontal = 10.dp, vertical = 12.dp),
+            )
             PlayerButton("⏮", onPrev)
             PlayerButton(if (ui.isPlaying || ui.buffering) "⏸" else "▶", onToggle, big = true)
             PlayerButton("⏭", onNext)

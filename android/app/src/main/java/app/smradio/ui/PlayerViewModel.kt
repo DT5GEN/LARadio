@@ -14,6 +14,7 @@ import androidx.media3.session.SessionToken
 import app.smradio.App
 import app.smradio.data.Station
 import app.smradio.playback.PlaybackService
+import app.smradio.playback.dsp.EqState
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,6 +35,7 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
 
     val catalog = container.catalogRepo.catalog
     val favorites = container.prefs.favorites
+    val eq: StateFlow<EqState> = container.eq.state
 
     private val _ui = MutableStateFlow(PlayerUi())
     val ui: StateFlow<PlayerUi> = _ui.asStateFlow()
@@ -101,6 +103,11 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
 
     fun next() { controller?.seekToNextMediaItem() }
     fun previous() { controller?.seekToPreviousMediaItem() }
+
+    fun setEq(enabled: Boolean, gains: List<Float>) {
+        container.eq.update(enabled, gains)
+        viewModelScope.launch { container.prefs.saveEq(container.eq.state.value) }
+    }
 
     fun toggleFavorite(stationId: String) {
         viewModelScope.launch { container.prefs.toggleFavorite(stationId) }
