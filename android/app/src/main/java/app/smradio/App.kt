@@ -1,0 +1,32 @@
+package app.smradio
+
+import android.app.Application
+import android.content.Context
+import app.smradio.data.CatalogRepository
+import app.smradio.data.Prefs
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
+
+/** Manual dependency container (the project is small, no DI framework needed). */
+class AppContainer(context: Context) {
+    val http: OkHttpClient = OkHttpClient.Builder()
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(20, TimeUnit.SECONDS)
+        .build()
+    val catalogRepo = CatalogRepository(context.applicationContext, http)
+    val prefs = Prefs(context.applicationContext)
+
+    companion object {
+        const val USER_AGENT = "SantaMonicaRadio/0.1"
+    }
+}
+
+class App : Application() {
+    lateinit var container: AppContainer
+        private set
+
+    override fun onCreate() {
+        super.onCreate()
+        container = AppContainer(this)
+    }
+}
