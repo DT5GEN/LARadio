@@ -28,8 +28,9 @@
   genres: [top40]
   homepage: https://sverigesradio.se/p3
   streams:
+    - { url: "https://edge1.sr.se/p3-aac-320", quality: high }
     - { url: "https://live1.sr.se/p3-aac-320", quality: high }
-    - { url: "https://live1.sr.se/p3-aac-128", quality: medium }
+    - { url: "https://live1.sr.se/p3-mp3-96", quality: medium }
     - { url: "https://sverigesradio.se/topsy/direkt/srapi/164.mp3", quality: medium }
 
 - id: se-sr-p4-stockholm
@@ -38,8 +39,8 @@
   genres: [adult]
   homepage: https://sverigesradio.se/stockholm
   streams:
-    - { url: "https://live1.sr.se/p4stockholm-aac-320", quality: high }
-    - { url: "https://live1.sr.se/p4stockholm-aac-128", quality: medium }
+    - { url: "https://edge1.sr.se/p4sth-aac-320", quality: high }
+    - { url: "https://live1.sr.se/p4sth-aac-320", quality: high }
     - { url: "https://sverigesradio.se/topsy/direkt/srapi/701.mp3", quality: medium }
 
 - id: se-rix-fm
@@ -47,5 +48,37 @@
   frequency: WEB
   genres: [top40]
   homepage: https://www.rixfm.se/
-  streams:   # guess
+  streams:   # confirmed by Radio Browser export (user, 2026-11-08)
     - { url: "https://fm01-ice.stream.khz.se/fm01_mp3", quality: high }
+
+- id: se-mix-megapol
+  name: Mix Megapol
+  frequency: 104.3 FM
+  genres: [top40]
+  homepage: https://radioplay.se/mixmegapol
+  streams:
+    - { url: "https://live-bauerse-fm.sharp-stream.com/mixmegapol_instream_se_mp3", quality: high }
+
+- id: se-bandit-rock
+  name: Bandit Rock
+  frequency: WEB
+  genres: [rock]
+  homepage: https://www.ilikeradio.se/banditrock/
+  streams:
+    - { url: "http://fm02-ice.stream.khz.se/fm02_mp3", quality: high }
+
+- id: se-lugna-favoriter
+  name: Lugna Favoriter
+  frequency: WEB
+  genres: [adult]
+  homepage: https://lugnafavoriter.se/
+  streams:
+    - { url: "http://fm03-ice.stream.khz.se/fm03_mp3", quality: high }
+
+- id: se-bandit-metal
+  name: Bandit Metal
+  frequency: WEB
+  genres: [rock]
+  homepage: https://www.viaplayradio.se/banditmetal/
+  streams:
+    - { url: "https://wr03-ice.stream.khz.se/wr03_mp3", quality: high }

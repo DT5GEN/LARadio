@@ -109,19 +109,55 @@ async function tdtSpain(): Promise<Extra[]> {
   }
 }
 
-function m3uFiles(regionId: string): Extra[] {
+/** A URL that points to a .m3u/.pls playlist (not to audio): download it and take the first stream address. */
+async function resolvePlaylist(url: string): Promise<string> {
+  if (!/\.(m3u|pls)(\?.*)?$/i.test(url)) return url;
+  try {
+    const r = await fetch(url, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(10000) });
+    if (!r.ok) return url;
+    const text = (await r.text()).slice(0, 4000);
+    const m = /^\s*(?:File\d+=)?(https?:\/\/\S+)/im.exec(text);
+    return m ? m[1].trim() : url;
+  } catch { return url; }
+}
+
+/** Own files in catalog/imports/<region>/: .m3u/.m3u8, .pls, and Radio Browser JSON exports (.json / .txt). */
+async function fileExtras(regionId: string): Promise<Extra[]> {
   const d = join(dir, "..", "imports", regionId);
   if (!existsSync(d)) return [];
   const out: Extra[] = [];
-  for (const f of readdirSync(d).filter(f => /\.m3u8?$/i.test(f))) {
-    const lines = readFileSync(join(d, f), "utf8").split(/\r?\n/);
-    let title = "";
-    for (const line of lines) {
-      if (line.startsWith("#EXTINF")) title = line.slice(line.lastIndexOf(",") + 1).trim();
-      else if (/^https?:\/\//.test(line.trim())) { out.push({ name: title || line.trim(), urls: [line.trim()], tags: "", source: "m3u:" + f }); title = ""; }
+  // JSON exports first: they carry tags (genre hints) that .pls/.m3u lack
+  for (const f of readdirSync(d).sort((x, y) => Number(/\.(json|txt)$/i.test(y)) - Number(/\.(json|txt)$/i.test(x)))) {
+    const text = readFileSync(join(d, f), "utf8").replace(/^\uFEFF/, "");
+    const src = "file:" + f;
+    if (/\.m3u8?$/i.test(f)) {
+      let title = "";
+      for (const line of text.split(/\r?\n/)) {
+        if (line.startsWith("#EXTINF")) title = line.slice(line.lastIndexOf(",") + 1).trim();
+        else if (/^https?:\/\//.test(line.trim())) { out.push({ name: title || line.trim(), urls: [line.trim()], tags: "", source: src }); title = ""; }
+      }
+    } else if (/\.pls$/i.test(f)) {
+      const titles = new Map<string, string>();
+      const files: [string, string][] = [];
+      for (const line of text.split(/\r?\n/)) {
+        const m = /^(Title|File)(\d+)=(.*)$/i.exec(line.trim());
+        if (!m) continue;
+        if (m[1].toLowerCase() === "title") titles.set(m[2], m[3].trim());
+        else if (/^https?:\/\//.test(m[3].trim())) files.push([m[2], m[3].trim()]);
+      }
+      for (const [n, url] of files) out.push({ name: titles.get(n) || url, urls: [url], tags: "", source: src });
+    } else if (/\.(json|txt)$/i.test(f) && text.trimStart().startsWith("[")) {
+      try {
+        for (const x of JSON.parse(text) as RB[]) {
+          if (x.lastcheckok === 0) continue;
+          const url = x.url_resolved || x.url;
+          if (x.name && /^https?:\/\//.test(url ?? "")) out.push({ name: x.name.trim(), urls: [url], tags: x.tags ?? "", homepage: x.homepage || undefined, source: src });
+        }
+      } catch (e: any) { console.warn(`[${regionId}] ${f}: bad JSON (${e.message})`); }
     }
   }
-  console.log(`[${regionId}] imports/*.m3u: ${out.length} stations`);
+  for (const e of out) e.urls = await Promise.all(e.urls.map(resolvePlaylist));
+  console.log(`[${regionId}] imports/ files: ${out.length} stations`);
   return out;
 }
 
@@ -132,7 +168,7 @@ for (const region of REGIONS) {
   const curated = loadCurated(region.file);
   const knownCallsigns = curated.map(s => (s.callsign ?? "").toLowerCase()).filter((c: string) => c.length >= 3);
   const knownNames = new Set(curated.map(s => norm(s.name)));
-  const knownUrls = new Set(curated.flatMap(s => (s.streams ?? []).map((x: any) => x.url.replace(/^https?:\/\//, ""))));
+  const knownUrls = new Set(curated.flatMap(s => (s.streams ?? []).map((x: any) => x.url.replace(/^https?:\/\//, "").replace(/\?.*$/, ""))));
 
   const byUuid = new Map<string, RB>();
   for (const q of QUERIES[region.id] ?? []) {
@@ -172,12 +208,15 @@ for (const region of REGIONS) {
   }
 
   // extras: TDTChannels (es) + own m3u files; skip brands that already flood the list (e.g. 20 sub-channels of one station)
-  const extras = [...(region.id === "es" ? await tdtSpain() : []), ...m3uFiles(region.id)];
+  const extras = [...(region.id === "es" ? await tdtSpain() : []), ...(await fileExtras(region.id))];
   const brandCount = new Map<string, number>();
+  const seenUrls = new Set<string>(all.filter(a => a.region === region.id).flatMap(a => a.streams.map((x: any) => x.url.replace(/^https?:\/\//, "").replace(/\?.*$/, ""))));
   for (const e of extras) {
     const n = norm(e.name);
     if (knownNames.has(n) || all.some(a => a.region === region.id && norm(a.name) === n)) continue;
-    if (e.urls.every(u => knownUrls.has(u.replace(/^https?:\/\//, "")))) continue;
+    const key = (u: string) => u.replace(/^https?:\/\//, "").replace(/\?.*$/, "");
+    if (e.urls.some(u => knownUrls.has(key(u)) || seenUrls.has(key(u)))) continue;
+    e.urls.forEach(u => seenUrls.add(key(u)));
     const b = brandOf(e.name);
     if ((brandCount.get(b) ?? 0) >= 3) continue;
     brandCount.set(b, (brandCount.get(b) ?? 0) + 1);

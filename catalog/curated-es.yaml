@@ -18,7 +18,7 @@
   homepage: https://los40.com/
   streams:
     - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/LOS40AAC.aac", quality: medium }
-    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/LOS40.mp3", quality: high }
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/Los40.mp3", quality: high }
 
 - id: es-cadena-dial
   name: Cadena Dial
@@ -34,6 +34,7 @@
   genres: [adult]
   homepage: https://www.cadena100.es/
   streams:
+    - { url: "http://cadena100-streamers-mp3.flumotion.com/cope/cadena100.mp3", quality: high }
     - { url: "https://cadena100-cope.flumotion.com/playlist.m3u8", quality: high }
 
 - id: es-kiss-fm
@@ -42,6 +43,7 @@
   genres: [top40]
   streams:
     - { url: "https://kissfm.kissfmradio.cires21.com/kissfm.mp3", quality: medium }
+    - { url: "https://adhandler.kissfmradio.cires21.com/get_link?url=https://bbkissfm.kissfmradio.cires21.com/bbkissfm.mp3", quality: low }
 
 - id: es-europa-fm
   name: Europa FM
@@ -70,3 +72,41 @@
   genres: [news]
   streams:
     - { url: "https://rtvelivestream.rtve.es/rtvesec/rne/rne_r1_main.m3u8", quality: high }
+
+- id: es-esradio
+  name: esRadio
+  frequency: WEB
+  genres: [news]
+  streams:
+    - { url: "https://libertaddigital-radio-live1.flumotion.com/libertaddigital/ld-live1-high.aac", quality: medium }
+    - { url: "http://livestreaming.esradio.fm/stream64.mp3", quality: low }
+
+- id: es-onda-cero
+  name: Onda Cero
+  frequency: WEB
+  genres: [news]
+  streams:
+    - { url: "https://radio-atres-live.ondacero.es/api/livestream-redirect/OCAAC.aac", quality: medium }
+    - { url: "https://atres-live.ondacero.es/live/ondacero/bitrate_1.m3u8", quality: high }
+
+- id: es-rock-fm
+  name: Rock FM
+  frequency: WEB
+  genres: [rock]
+  streams:
+    - { url: "https://rockfm-cope.flumotion.com/playlist.m3u8", quality: high }
+    - { url: "http://flucast05-o-cloud.flumotion.com/cope/rockfm-low.mp3", quality: medium }
+
+- id: es-rac1
+  name: RAC1
+  frequency: WEB
+  genres: [news]
+  streams:
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/RAC_1.mp3", quality: high }
+
+- id: es-los40-classic
+  name: LOS40 Classic
+  frequency: WEB
+  genres: [classic-hits]
+  streams:
+    - { url: "https://playerservices.streamtheworld.com/api/livestream-redirect/LOS40_CLASSIC.mp3", quality: high }
