@@ -44,6 +44,7 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
     val catalog = container.catalogRepo.catalog
     val favorites = container.prefs.favorites
     val region = container.prefs.region
+    val rec = container.recorder.state
     val eq: StateFlow<EqState> = container.eq.state
     val settings: StateFlow<Settings> = container.settings.state
     val sleepEnd: StateFlow<Long?> = container.sleep.endAtMs
@@ -163,6 +164,9 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
     fun setSleepTimer(minutes: Int) {
         if (minutes <= 0) container.sleep.cancel() else container.sleep.start(minutes)
     }
+
+    /** REC: start / stop saving the song that is playing. */
+    fun toggleRecord() = container.recorder.toggle(_ui.value.stationName)
 
     fun setRegion(id: String) {
         viewModelScope.launch { container.prefs.saveRegion(id) }

@@ -59,6 +59,7 @@ import app.smradio.data.Catalog
 import app.smradio.data.Genre
 import app.smradio.data.Region
 import app.smradio.data.Station
+import app.smradio.playback.rec.RecState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 
@@ -87,6 +88,7 @@ fun AppRoot(vm: PlayerViewModel) {
     val savedRegion by vm.region.collectAsState(initial = "la")
     val ui by vm.ui.collectAsState()
     val eq by vm.eq.collectAsState()
+    val rec by vm.rec.collectAsState()
     var genreId by rememberSaveable { mutableStateOf<String?>(null) }
     var showEq by rememberSaveable { mutableStateOf(false) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
@@ -118,6 +120,7 @@ fun AppRoot(vm: PlayerViewModel) {
             onToggle = vm::togglePlay, onPrev = vm::previous, onNext = vm::next,
             onExit = { carMode = false },
             landscape = landscape,
+            rec = rec, onRec = vm::toggleRecord,
         )
         return
     }
@@ -177,6 +180,8 @@ fun AppRoot(vm: PlayerViewModel) {
             LandscapeShell(
                 ui = ui,
                 eqOn = eq.enabled,
+                rec = rec,
+                onRec = vm::toggleRecord,
                 canBack = showSettings || showEq || genreId != null,
                 onBack = {
                     when {
@@ -207,6 +212,8 @@ fun AppRoot(vm: PlayerViewModel) {
                     onOfficial = { openOfficial(ui.stationId) },
                     eqOn = eq.enabled,
                     onEq = { showEq = true },
+                    rec = rec,
+                    onRec = vm::toggleRecord,
                     bufferedSec = vm.bufferedSec,
                     sleepEnd = vm.sleepEnd,
                 )
@@ -414,6 +421,8 @@ private fun MiniPlayer(
     onOfficial: () -> Unit,
     eqOn: Boolean,
     onEq: () -> Unit,
+    rec: RecState,
+    onRec: () -> Unit,
     bufferedSec: StateFlow<Int>,
     sleepEnd: StateFlow<Long?>,
 ) {
@@ -429,7 +438,7 @@ private fun MiniPlayer(
             Text(T.PICK_STATION, color = Muted, fontFamily = FontFamily.Monospace, fontSize = 13.sp, modifier = Modifier.padding(vertical = 12.dp))
             return@Column
         }
-        InfoLine(ui.info, bufferedSec, sleepEnd)
+        InfoLine(ui.info, bufferedSec, sleepEnd, rec, onRec, eqOn, onEq)
         SegmentBars(
             active = ui.isPlaying,
             modifier = Modifier.fillMaxWidth().height(56.dp).padding(bottom = 8.dp),
@@ -448,12 +457,8 @@ private fun MiniPlayer(
                     ui.isPlaying -> T.LIVE
                     else -> ""
                 }
-                Text(sub, color = if (ui.failed) ErrorRed else Lit, fontFamily = FontFamily.Monospace, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(rec.message ?: sub, color = if (ui.failed) ErrorRed else Lit, fontFamily = FontFamily.Monospace, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
-            Text(
-                "EQ", color = if (eqOn) Lit else Muted, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, fontSize = 14.sp,
-                modifier = Modifier.clip(RoundedCornerShape(8.dp)).clickable(onClick = onEq).padding(horizontal = 10.dp, vertical = 12.dp),
-            )
             PlayerButton("⏮", onPrev)
             PlayerButton(if (ui.isPlaying || ui.buffering || ui.reconnecting || ui.offline) "⏸" else "▶", onToggle, big = true)
             PlayerButton("⏭", onNext)
@@ -469,7 +474,15 @@ private fun MiniPlayer(
 
 /** Small LED-style line above the bars: stream info on the left, buffer / sleep timer on the right. */
 @Composable
-private fun InfoLine(info: String, bufferedSec: StateFlow<Int>, sleepEnd: StateFlow<Long?>) {
+private fun InfoLine(
+    info: String,
+    bufferedSec: StateFlow<Int>,
+    sleepEnd: StateFlow<Long?>,
+    rec: RecState,
+    onRec: () -> Unit,
+    eqOn: Boolean,
+    onEq: () -> Unit,
+) {
     val buffered by bufferedSec.collectAsState()
     val end by sleepEnd.collectAsState()
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
@@ -487,11 +500,37 @@ private fun InfoLine(info: String, bufferedSec: StateFlow<Int>, sleepEnd: StateF
             add("СОН %d:%02d".format(left / 60, left % 60))
         }
     }
-    Row(Modifier.fillMaxWidth().padding(bottom = 4.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(info, color = Muted, fontFamily = FontFamily.Monospace, fontSize = 11.sp, maxLines = 1)
-        Text(parts.joinToString("   "), color = Muted, fontFamily = FontFamily.Monospace, fontSize = 11.sp, maxLines = 1)
+    val left = when {
+        rec.recording -> "● ЗАПИСЬ ${clock(rec.seconds)}" + (rec.title?.let { "  $it" } ?: "")
+        else -> info
+    }
+    Row(Modifier.fillMaxWidth().padding(bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            left, color = if (rec.recording) ErrorRed else Muted, fontFamily = FontFamily.Monospace, fontSize = 11.sp,
+            maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f),
+        )
+        if (parts.isNotEmpty() && !rec.recording) {
+            Text(parts.joinToString("   "), color = Muted, fontFamily = FontFamily.Monospace, fontSize = 11.sp, maxLines = 1)
+        }
+        InfoChip(if (rec.recording) "■ СТОП" else "● REC", rec.recording, if (rec.recording || rec.canRecord) ErrorRed else Dim, onRec)
+        InfoChip("EQ", eqOn, if (eqOn) Lit else Muted, onEq)
     }
 }
+
+@Composable
+private fun InfoChip(text: String, filled: Boolean, color: Color, onClick: () -> Unit) {
+    Text(
+        text, color = color, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, fontSize = 13.sp, maxLines = 1,
+        modifier = Modifier
+            .padding(start = 6.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .border(BorderStroke(1.dp, color.copy(alpha = if (filled) 0.9f else 0.4f)), RoundedCornerShape(8.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 10.dp, vertical = 8.dp),
+    )
+}
+
+internal fun clock(sec: Int) = "%d:%02d".format(sec / 60, sec % 60)
 
 @Composable
 private fun PlayerButton(label: String, onClick: () -> Unit, big: Boolean = false) {
@@ -526,6 +565,8 @@ private fun statusText(ui: PlayerUi): String = when {
 private fun LandscapeShell(
     ui: PlayerUi,
     eqOn: Boolean,
+    rec: RecState,
+    onRec: () -> Unit,
     canBack: Boolean,
     onBack: () -> Unit,
     onToggle: () -> Unit,
@@ -549,6 +590,7 @@ private fun LandscapeShell(
                     Box(Modifier.alpha(if (canBack) 1f else 0f)) {
                         SideButton("‹ НАЗАД", if (canBack) onBack else ({}))
                     }
+                    SideButton(if (rec.recording) "■ ${clock(rec.seconds)}" else "● REC", onRec, active = rec.recording, danger = true)
                     SideButton("EQ", onEq, active = eqOn)
                     SideButton("МАШИНА", onCar)
                     SideButton(T.SETTINGS, onSettings)
@@ -569,7 +611,9 @@ private fun LandscapeShell(
                 Spacer(Modifier.width(8.dp))
                 Text(ui.stationName ?: "", color = TextMain, fontWeight = FontWeight.Bold, fontSize = 14.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
                 Spacer(Modifier.width(10.dp))
-                Text(statusText(ui), color = if (ui.failed) ErrorRed else Lit, fontFamily = FontFamily.Monospace, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                Text(
+                    if (rec.recording) "● ЗАПИСЬ ${clock(rec.seconds)}" + (rec.title?.let { "  $it" } ?: "") else rec.message ?: statusText(ui),
+                    color = if (ui.failed || rec.recording) ErrorRed else Lit, fontFamily = FontFamily.Monospace, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
                 if (ui.failed) {
                     Text(T.OFFICIAL, color = Sand, fontWeight = FontWeight.Bold, fontSize = 12.sp, modifier = Modifier.clickable(onClick = onOfficial).padding(start = 8.dp))
                 } else {
@@ -581,13 +625,14 @@ private fun LandscapeShell(
 }
 
 @Composable
-private fun SideButton(label: String, onClick: () -> Unit, active: Boolean = false) {
+private fun SideButton(label: String, onClick: () -> Unit, active: Boolean = false, danger: Boolean = false) {
     val shape = RoundedCornerShape(10.dp)
+    val accent = if (danger) ErrorRed else Lit
     Box(
-        Modifier.fillMaxWidth().clip(shape).background(Panel2).border(BorderStroke(1.dp, if (active) Lit.copy(alpha = 0.7f) else Line), shape)
-            .clickable(onClick = onClick).padding(vertical = 12.dp),
+        Modifier.fillMaxWidth().clip(shape).background(Panel2).border(BorderStroke(1.dp, if (active) accent.copy(alpha = 0.8f) else Line), shape)
+            .clickable(onClick = onClick).padding(vertical = 10.dp),
         contentAlignment = Alignment.Center,
     ) {
-        Text(label, color = if (active) Lit else Sand, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, fontSize = 13.sp, maxLines = 1)
+        Text(label, color = if (active) accent else if (danger) ErrorRed.copy(alpha = 0.8f) else Sand, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, fontSize = 13.sp, maxLines = 1)
     }
 }

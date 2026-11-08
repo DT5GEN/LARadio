@@ -42,6 +42,8 @@ import app.smradio.data.Catalog
 import app.smradio.data.Genre
 import app.smradio.data.Region
 import app.smradio.data.Station
+import app.smradio.playback.rec.RecState
+import androidx.compose.foundation.layout.Spacer
 
 /**
  * Car mode: black screen, big targets, NO animation (cheap to mirror over CarLife / Miracast),
@@ -63,6 +65,8 @@ fun CarScreen(
     onNext: () -> Unit,
     onExit: () -> Unit,
     landscape: Boolean,
+    rec: RecState,
+    onRec: () -> Unit,
 ) {
     val view = LocalView.current
     DisposableEffect(view) {
@@ -75,7 +79,10 @@ fun CarScreen(
 
     val genre = catalog.genres.find { it.id == genreId }
     val playing = ui.isPlaying || ui.buffering || ui.reconnecting || ui.offline
+    val recLabel = if (rec.recording) "■ ${clock(rec.seconds)}" else "● REC"
     val sub = when {
+        rec.recording -> "● ЗАПИСЬ ${clock(rec.seconds)}" + (rec.title?.let { "  $it" } ?: "")
+        rec.message != null -> rec.message
         ui.failed -> "Станция недоступна"
         ui.offline -> "Нет сети — ждём…"
         ui.reconnecting -> "Переподключение…"
@@ -94,7 +101,10 @@ fun CarScreen(
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    CarTextButton(if (genre != null) "‹ ЖАНРЫ" else "‹ ВЫХОД") { if (genre != null) genreId = null else onExit() }
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        CarTextButton(if (genre != null) "‹ ЖАНРЫ" else "‹ ВЫХОД", { if (genre != null) genreId = null else onExit() })
+                        CarTextButton(recLabel, onRec, color = ErrorRed)
+                    }
                     // playback at the bottom, next to the status line, under the thumb
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
                         CarButton("⏮", 56, onPrev)
@@ -106,7 +116,7 @@ fun CarScreen(
             Row(Modifier.fillMaxWidth().background(Panel).padding(horizontal = 14.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text(ui.stationName ?: "Выберите станцию", color = TextMain, fontSize = 16.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
                 if (ui.stationId != null) {
-                    Text("   $sub", color = if (ui.failed) ErrorRed else Lit, fontFamily = FontFamily.Monospace, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                    Text("   $sub", color = if (ui.failed || rec.recording) ErrorRed else Lit, fontFamily = FontFamily.Monospace, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
                 }
             }
         }
@@ -116,13 +126,15 @@ fun CarScreen(
     Column(Modifier.fillMaxSize().background(Color.Black).statusBarsPadding().navigationBarsPadding()) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             CarTextButton("‹ ВЫХОД", onExit)
-            if (genre != null) CarTextButton("‹ ЖАНРЫ") { genreId = null }
+            if (genre != null) CarTextButton("‹ ЖАНРЫ", { genreId = null })
+            Spacer(Modifier.weight(1f))
+            CarTextButton(recLabel, onRec, color = ErrorRed)
         }
         CarList(Modifier.weight(1f).fillMaxWidth(), catalog, favorites, ui, genre, compact = false, regions = regions, regionId = regionId, onRegion = onRegion, onPlay = onPlay, onGenre = { genreId = it })
         Column(Modifier.fillMaxWidth().background(Panel).padding(horizontal = 16.dp, vertical = 10.dp)) {
             if (ui.stationId != null) {
                 Text(ui.stationName ?: "", color = TextMain, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(sub ?: "", color = if (ui.failed) ErrorRed else Lit, fontFamily = FontFamily.Monospace, fontSize = 15.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(sub ?: "", color = if (ui.failed || rec.recording) ErrorRed else Lit, fontFamily = FontFamily.Monospace, fontSize = 15.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
             } else {
                 Text("Выберите станцию", color = Muted, fontSize = 18.sp)
             }
@@ -178,9 +190,9 @@ private fun CarList(
 }
 
 @Composable
-private fun CarTextButton(text: String, onClick: () -> Unit) {
+private fun CarTextButton(text: String, onClick: () -> Unit, color: Color = Sand) {
     Text(
-        text, color = Sand, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, fontSize = 16.sp,
+        text, color = color, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, fontSize = 16.sp,
         modifier = Modifier.clip(RoundedCornerShape(10.dp)).clickable(onClick = onClick).padding(horizontal = 14.dp, vertical = 16.dp),
     )
 }

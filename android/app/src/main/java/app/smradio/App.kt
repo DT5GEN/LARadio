@@ -7,6 +7,7 @@ import app.smradio.data.Prefs
 import app.smradio.data.SettingsController
 import app.smradio.data.SleepTimer
 import app.smradio.playback.NetworkMonitor
+import app.smradio.playback.rec.TrackRecorder
 import app.smradio.playback.dsp.EqController
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -29,6 +30,7 @@ class AppContainer(context: Context) {
     val settings = SettingsController(runBlocking { prefs.settings.first() })
     val sleep = SleepTimer()
     val net = NetworkMonitor(context.applicationContext)
+    val recorder = TrackRecorder(context.applicationContext)
 
     companion object {
         const val USER_AGENT = "SantaMonicaRadio/0.1"

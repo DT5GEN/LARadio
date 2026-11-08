@@ -14,6 +14,7 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.audio.AudioProcessor
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.okhttp.OkHttpDataSource
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.DefaultRenderersFactory
@@ -37,6 +38,7 @@ import app.smradio.data.Stream
 import app.smradio.playback.dsp.EqAudioProcessor
 import app.smradio.playback.dsp.FftTapProcessor
 import app.smradio.playback.dsp.SpectrumBus
+import app.smradio.playback.rec.IcyTeeDataSource
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
@@ -114,6 +116,7 @@ class PlaybackService : MediaLibraryService() {
 
     private val statsTick = object : Runnable {
         override fun run() {
+            container.recorder.aheadMs = player.totalBufferedDuration
             if (SpectrumBus.appForeground && player.playWhenReady) {
                 LiveStats.bufferedSec.value = (player.totalBufferedDuration / 1000).toInt().coerceAtLeast(0)
             }
@@ -192,7 +195,9 @@ class PlaybackService : MediaLibraryService() {
 
     /** Audio goes through: equalizer -> spectrum tap -> speaker. Buffer behaviour follows [profile]. */
     private fun buildPlayer(profile: BufferProfile): ExoPlayer {
-        val dataSourceFactory = OkHttpDataSource.Factory(container.http).setUserAgent(AppContainer.USER_AGENT)
+        val httpFactory = OkHttpDataSource.Factory(container.http).setUserAgent(AppContainer.USER_AGENT)
+        // the "tee" copies the raw stream for the recorder (REC button) and passes it through unchanged
+        val dataSourceFactory = DataSource.Factory { IcyTeeDataSource(httpFactory.createDataSource(), container.recorder.tap) }
         val renderersFactory = object : DefaultRenderersFactory(this) {
             override fun buildAudioSink(
                 context: Context,
@@ -348,6 +353,7 @@ class PlaybackService : MediaLibraryService() {
     }
 
     private fun resetStationState() {
+        container.recorder.onStationChanged()
         handler.removeCallbacks(retryRunnable)
         handler.removeCallbacks(stallRestart)
         retryPending = false
