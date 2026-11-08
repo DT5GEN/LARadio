@@ -38,6 +38,9 @@ data class RecState(
     val message: String? = null,
 )
 
+/** Which station the song comes from (becomes the tags used for filtering recordings). */
+data class RecMeta(val stationId: String?, val stationName: String?, val genres: List<String>)
+
 /**
  * "Record this song" (docs/CONCEPT.md 5.9a).
  *
@@ -48,7 +51,7 @@ data class RecState(
  * Everything here is best-effort: any failure is swallowed so that playback is never affected.
  */
 @UnstableApi
-class TrackRecorder(private val context: Context) {
+class TrackRecorder(private val context: Context, private val store: RecordingStore) {
 
     private enum class Fmt(val ext: String, val mime: String) {
         MP3("mp3", "audio/mpeg"), AAC("aac", "audio/aac"), OGG("ogg", "audio/ogg")
@@ -63,7 +66,9 @@ class TrackRecorder(private val context: Context) {
         val partial: Boolean,
         val autoStop: Boolean,
         val startedAt: Long,
-        val close: (keep: Boolean) -> String?,
+        val meta: RecMeta?,
+        /** returns (file name, uri) when kept */
+        val close: (keep: Boolean) -> Pair<String, String>?,
     ) {
         var bytes = 0L
         fun write(b: ByteArray, off: Int, n: Int) { out.write(b, off, n); bytes += n }
@@ -102,10 +107,10 @@ class TrackRecorder(private val context: Context) {
 
     // ------------------------------------------------------------------ public API
 
-    fun toggle(stationName: String?) {
+    fun toggle(meta: RecMeta?) {
         io.execute {
             try {
-                synchronized(lock) { if (active != null) finish() else begin(stationName ?: icyName) }
+                synchronized(lock) { if (active != null) finish() else begin(meta) }
             } catch (t: Throwable) {
                 Log.w(TAG, "toggle failed", t)
             }
@@ -254,7 +259,8 @@ class TrackRecorder(private val context: Context) {
         return if (icyBitrate > 0) icyBitrate * 125.0 else 16_000.0
     }
 
-    private fun begin(station: String?) {
+    private fun begin(meta: RecMeta?) {
+        val station = meta?.stationName ?: icyName
         val f = fmt
         if (f == null || chunks.isEmpty()) return say("Сейчас нечего записывать")
         val bufferStart = chunks.first().startAbs
@@ -268,7 +274,7 @@ class TrackRecorder(private val context: Context) {
         val endAbs = if (cur != null && next != null) next.absPos else null
 
         val sink = openSink(title, station, f) ?: return say("Не удалось создать файл")
-        val a = Active(sink.first, title, partial, autoStop = cur != null, startedAt = SystemClock.elapsedRealtime(), close = sink.second)
+        val a = Active(sink.first, title, partial, autoStop = cur != null, startedAt = SystemClock.elapsedRealtime(), meta = meta, close = sink.second)
         // backfill from the rolling buffer
         val stop = endAbs ?: totalAbs
         for (c in chunks) {
@@ -286,7 +292,30 @@ class TrackRecorder(private val context: Context) {
         val a = active ?: return
         active = null
         val tooShort = a.bytes < MIN_BYTES
-        val name = try { a.close(!tooShort) } catch (t: Throwable) { Log.w(TAG, "close failed", t); null }
+        val saved = try { a.close(!tooShort) } catch (t: Throwable) { Log.w(TAG, "close failed", t); null }
+        val name = saved?.first
+        if (saved != null) {
+            val t = a.title ?: name!!.substringBeforeLast('.')
+            val hasArtist = a.title != null && a.title.contains(" - ")
+            try {
+                store.add(
+                    Recording(
+                        id = "r" + System.currentTimeMillis(),
+                        uri = saved.second,
+                        fileName = saved.first,
+                        title = if (hasArtist) t.substringAfter(" - ") else t,
+                        artist = if (hasArtist) t.substringBefore(" - ") else null,
+                        stationId = a.meta?.stationId,
+                        stationName = a.meta?.stationName ?: icyName ?: "",
+                        genres = a.meta?.genres ?: emptyList(),
+                        timeMs = System.currentTimeMillis(),
+                        sizeBytes = a.bytes,
+                        durationSec = (a.bytes / bytesPerSec()).toInt(),
+                        partial = a.partial,
+                    )
+                )
+            } catch (e: Throwable) { Log.w(TAG, "index failed", e) }
+        }
         say(
             when {
                 tooShort -> "Слишком коротко — не сохранено"
@@ -319,7 +348,7 @@ class TrackRecorder(private val context: Context) {
 
     // ------------------------------------------------------------------ output file
 
-    private fun openSink(title: String?, station: String?, f: Fmt): Pair<OutputStream, (Boolean) -> String?>? {
+    private fun openSink(title: String?, station: String?, f: Fmt): Pair<OutputStream, (Boolean) -> Pair<String, String>?>? {
         val artist = title?.substringBefore(" - ", "")?.takeIf { it.isNotEmpty() && title.contains(" - ") }
         val song = if (artist != null) title.substringAfter(" - ") else title
         val base = sanitize(title ?: "${station ?: "Radio"} ${SimpleDateFormat("yyyy-MM-dd HH-mm", Locale.US).format(Date())}")
@@ -344,7 +373,7 @@ class TrackRecorder(private val context: Context) {
                     try { out.close() } catch (_: Exception) { }
                     if (keep) {
                         resolver.update(uri, ContentValues().apply { put(MediaStore.Audio.Media.IS_PENDING, 0) }, null, null)
-                        fileName
+                        Pair(fileName, uri.toString())
                     } else {
                         resolver.delete(uri, null, null)
                         null
@@ -359,7 +388,7 @@ class TrackRecorder(private val context: Context) {
                 if (f == Fmt.MP3) out.write(id3(song ?: base, artist, station))
                 Pair(out) { keep ->
                     try { out.close() } catch (_: Exception) { }
-                    if (keep) file.name else { file.delete(); null }
+                    if (keep) Pair(file.name, Uri.fromFile(file).toString()) else { file.delete(); null }
                 }
             }
         } catch (t: Throwable) {

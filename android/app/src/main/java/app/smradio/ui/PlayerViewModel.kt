@@ -19,6 +19,9 @@ import app.smradio.data.Station
 import app.smradio.playback.LiveStats
 import app.smradio.playback.PlaybackService
 import app.smradio.playback.dsp.EqState
+import app.smradio.playback.rec.RecMeta
+import app.smradio.playback.rec.Recording
+import kotlinx.coroutines.Dispatchers
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -45,6 +48,8 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
     val favorites = container.prefs.favorites
     val region = container.prefs.region
     val rec = container.recorder.state
+    val recordings: StateFlow<List<Recording>> = container.recordings.items
+    val recPlay = container.recPlayer.state
     val eq: StateFlow<EqState> = container.eq.state
     val settings: StateFlow<Settings> = container.settings.state
     val sleepEnd: StateFlow<Long?> = container.sleep.endAtMs
@@ -78,6 +83,8 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
 
     init {
         viewModelScope.launch { container.catalogRepo.refresh() }
+        viewModelScope.launch(Dispatchers.IO) { container.recordings.prune() }
+        container.recPlayer.onStarted = { controller?.pause() }
         val token = SessionToken(app, ComponentName(app, PlaybackService::class.java))
         val future = MediaController.Builder(app, token).setListener(sessionListener).buildAsync()
         controllerFuture = future
@@ -93,6 +100,7 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
         val station = md.artist?.toString() ?: md.title?.toString()
         val title = md.title?.toString()
         val id = c.currentMediaItem?.mediaId
+        if (c.isPlaying) container.recPlayer.stop() // the radio won: stop playing a saved song
         _ui.value = PlayerUi(
             stationId = id,
             stationName = station,
@@ -166,7 +174,22 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     /** REC: start / stop saving the song that is playing. */
-    fun toggleRecord() = container.recorder.toggle(_ui.value.stationName)
+    fun toggleRecord() {
+        val u = _ui.value
+        val st = catalog.value.stations.find { it.id == u.stationId }
+        container.recorder.toggle(RecMeta(u.stationId, st?.name ?: u.stationName, st?.genres ?: emptyList()))
+    }
+
+    fun playRecording(r: Recording, list: List<Recording>) = container.recPlayer.play(r, list)
+    fun toggleRecPlay() = container.recPlayer.toggle()
+    fun seekRec(f: Float) = container.recPlayer.seekFraction(f)
+    fun nextRec() = container.recPlayer.next()
+    fun previousRec() = container.recPlayer.previous()
+    fun stopRec() = container.recPlayer.stop()
+    fun deleteRecording(r: Recording) {
+        if (container.recPlayer.state.value.id == r.id) container.recPlayer.stop()
+        viewModelScope.launch(Dispatchers.IO) { container.recordings.remove(r.id) }
+    }
 
     fun setRegion(id: String) {
         viewModelScope.launch { container.prefs.saveRegion(id) }

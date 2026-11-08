@@ -92,6 +92,9 @@ fun AppRoot(vm: PlayerViewModel) {
     var genreId by rememberSaveable { mutableStateOf<String?>(null) }
     var showEq by rememberSaveable { mutableStateOf(false) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
+    var showRecs by rememberSaveable { mutableStateOf(false) }
+    val recordings by vm.recordings.collectAsState()
+    val recPlay by vm.recPlay.collectAsState()
     var carMode by rememberSaveable { mutableStateOf(false) }
     val settings by vm.settings.collectAsState()
     val sleepEnd by vm.sleepEnd.collectAsState()
@@ -111,6 +114,7 @@ fun AppRoot(vm: PlayerViewModel) {
     BackHandler(enabled = genreId != null) { genreId = null }
     BackHandler(enabled = showEq) { showEq = false }
     BackHandler(enabled = showSettings) { showSettings = false }
+    BackHandler(enabled = showRecs) { showRecs = false }
 
     if (carMode) {
         CarScreen(
@@ -132,7 +136,21 @@ fun AppRoot(vm: PlayerViewModel) {
 
     val body: @Composable () -> Unit = {
             val genre = regionCatalog.genres.find { it.id == genreId }
-            if (showSettings) {
+            if (showRecs) {
+                RecordingsScreen(
+                    recs = recordings,
+                    genres = catalog.genres,
+                    play = recPlay,
+                    landscape = landscape,
+                    onBack = { showRecs = false },
+                    onPlay = vm::playRecording,
+                    onToggle = vm::toggleRecPlay,
+                    onPrev = vm::previousRec,
+                    onNext = vm::nextRec,
+                    onSeek = vm::seekRec,
+                    onDelete = vm::deleteRecording,
+                )
+            } else if (showSettings) {
                 SettingsScreen(
                     settings = settings,
                     sleepEnd = sleepEnd,
@@ -155,6 +173,7 @@ fun AppRoot(vm: PlayerViewModel) {
                     onGenre = { genreId = it.id },
                     onSettings = { showSettings = true },
                     onCar = { carMode = true },
+                    onRecs = { showRecs = true },
                     onPlay = { station, list -> vm.play(station, list) },
                     onFavorite = vm::toggleFavorite,
                     onOfficial = ::openOfficial,
@@ -182,9 +201,10 @@ fun AppRoot(vm: PlayerViewModel) {
                 eqOn = eq.enabled,
                 rec = rec,
                 onRec = vm::toggleRecord,
-                canBack = showSettings || showEq || genreId != null,
+                canBack = showRecs || showSettings || showEq || genreId != null,
                 onBack = {
                     when {
+                        showRecs -> showRecs = false
                         showSettings -> showSettings = false
                         showEq -> showEq = false
                         else -> genreId = null
@@ -196,6 +216,7 @@ fun AppRoot(vm: PlayerViewModel) {
                 onEq = { showEq = true },
                 onSettings = { showSettings = true },
                 onCar = { carMode = true },
+                onRecs = { showRecs = true },
                 onOfficial = { openOfficial(ui.stationId) },
                 content = body,
             )
@@ -236,6 +257,7 @@ private fun HomeScreen(
     onGenre: (Genre) -> Unit,
     onSettings: () -> Unit,
     onCar: () -> Unit,
+    onRecs: () -> Unit,
     onPlay: (Station, List<Station>) -> Unit,
     onFavorite: (String) -> Unit,
     onOfficial: (String) -> Unit,
@@ -252,8 +274,8 @@ private fun HomeScreen(
                     Text(T.TAGLINE, color = Sand, fontFamily = FontFamily.Monospace, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     Spacer(Modifier.height(4.dp))
                     Text("Santa Monica Radio", color = TextMain, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold)
-                }
-                for ((label, action) in listOf("МАШИНА" to onCar, T.SETTINGS to onSettings)) {
+                    Row(Modifier.padding(top = 10.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                for ((label, action) in listOf("ЗАПИСИ" to onRecs, "МАШИНА" to onCar, T.SETTINGS to onSettings)) {
                     Text(
                         label, color = Sand, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, fontSize = 11.sp,
                         modifier = Modifier
@@ -263,6 +285,8 @@ private fun HomeScreen(
                             .clickable(onClick = action)
                             .padding(horizontal = 10.dp, vertical = 10.dp),
                     )
+                }
+                    }
                 }
             }
         }
@@ -533,7 +557,7 @@ private fun InfoChip(text: String, filled: Boolean, color: Color, onClick: () ->
 internal fun clock(sec: Int) = "%d:%02d".format(sec / 60, sec % 60)
 
 @Composable
-private fun PlayerButton(label: String, onClick: () -> Unit, big: Boolean = false) {
+internal fun PlayerButton(label: String, onClick: () -> Unit, big: Boolean = false) {
     Box(
         Modifier
             .size(if (big) 52.dp else 44.dp)
@@ -575,6 +599,7 @@ private fun LandscapeShell(
     onEq: () -> Unit,
     onSettings: () -> Unit,
     onCar: () -> Unit,
+    onRecs: () -> Unit,
     onOfficial: () -> Unit,
     content: @Composable () -> Unit,
 ) {
@@ -586,12 +611,13 @@ private fun LandscapeShell(
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 // fixed slots: nothing jumps when "back" appears; playback sits at the bottom, under the thumb
-                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Box(Modifier.alpha(if (canBack) 1f else 0f)) {
                         SideButton("‹ НАЗАД", if (canBack) onBack else ({}))
                     }
                     SideButton(if (rec.recording) "■ ${clock(rec.seconds)}" else "● REC", onRec, active = rec.recording, danger = true)
                     SideButton("EQ", onEq, active = eqOn)
+                    SideButton("ЗАПИСИ", onRecs)
                     SideButton("МАШИНА", onCar)
                     SideButton(T.SETTINGS, onSettings)
                 }
